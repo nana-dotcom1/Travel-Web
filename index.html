@@ -7,7 +7,369 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
-<link rel="stylesheet" href="styles.css">
+<style>
+/* =========================================================
+   Travel Planner — styled to match the annotated wireframes.
+   Measurements come from the 1440 × 936 desktop frames.
+   Page content runs from x = 62 to x = 1378.
+   ========================================================= */
+
+:root {
+  --ink: #222222;          /* headings, primary text */
+  --text: #444444;         /* body text */
+  --muted: #7a7a7a;        /* secondary text */
+  --line: #e4e4e4;         /* borders and dividers */
+  --line-dark: #cfcfcf;    /* input and button borders */
+  --panel: #f8f8f8;        /* gray panels */
+  --ph: #f3f3f3;           /* image placeholders */
+  --ph-x: #c9c9c9;         /* placeholder X lines */
+  --chip: #dddddd;         /* selected interest boxes */
+  --strip: #e9e9e9;        /* compare strip */
+  --btn: #2a2a2a;          /* primary buttons */
+  --font: "Inter", "Helvetica Neue", Arial, sans-serif;
+  color-scheme: light;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; background: #ffffff; color: var(--text); font-family: var(--font); font-size: 14px; line-height: 1.3; }
+img { max-width: 100%; }
+[hidden] { display: none !important; }
+h1, h2, h3, p { margin: 0; }
+h1, h2, h3 { color: var(--ink); font-weight: 700; letter-spacing: -0.01em; }
+hr { border: 0; border-top: 1px solid var(--line); margin: 0; }
+button, input, select { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 2px solid #000; outline-offset: 2px; }
+.muted { color: var(--muted); }
+
+.wrap { max-width: 1440px; margin: 0 auto; padding-left: max(64px, env(safe-area-inset-left, 0px)); padding-right: max(63px, env(safe-area-inset-right, 0px)); }
+main { padding-bottom: 80px; }
+
+/* ---------- header (measured from the home frame) ---------- */
+.top { background: #fff; }
+.bar { height: 88px; padding-top: 15px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #c3c3c3; }
+.brand { background: none; border: 0; padding: 0; font-size: 21px; font-weight: 700; text-transform: uppercase; color: #333; letter-spacing: 0; line-height: 1; }
+.brand svg { display: none; }
+.nav { display: flex; padding-right: 111px; margin-top: 4px; }
+.nav button { background: none; border: 0; padding: 0; font-size: 16px; color: #333; line-height: 1; }
+.nav button + button { margin-left: 93px; }
+.nav button + button + button { margin-left: 100px; }
+.nav button:hover { text-decoration: underline; }
+.nav button[aria-current="page"] { font-weight: 400; }
+
+/* ---------- buttons ---------- */
+.btn { display: inline-flex; align-items: center; justify-content: center; border-radius: 3px; border: 1px solid transparent; font-size: 13px; font-weight: 600; padding: 0 16px; height: 45px; white-space: nowrap; }
+.btn-left { justify-content: flex-start; padding-left: 18px; }
+.btn-primary { background: var(--btn); border-color: var(--btn); color: #fff; }
+.btn-primary:hover { background: #000; }
+.btn-secondary { background: #fff; border-color: var(--line-dark); color: var(--ink); }
+.btn-secondary:hover { border-color: var(--ink); }
+.btn[disabled] { opacity: 0.45; cursor: not-allowed; }
+
+/* ---------- image placeholder (gray box with an X) ---------- */
+.ph { position: relative; background: var(--ph); border: 1px solid var(--ph-x); overflow: hidden; display: grid; place-items: center; }
+.ph svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.ph line { stroke: var(--ph-x); stroke-width: 1; vector-effect: non-scaling-stroke; }
+/* label box: 160px wide, 37px tall, text left-aligned inside it (as in the wireframe) */
+.ph span { position: relative; display: flex; align-items: center; min-width: 160px; height: 37px; font-size: 15px; color: #333; background: var(--ph); padding: 0; white-space: nowrap; }
+
+/* shared text pieces */
+.sub { font-size: 15px; color: var(--muted); }
+.meta { font-size: 15px; color: var(--muted); margin-top: 13px; }
+.crumb { display: block; background: none; border: 0; padding: 0; font-size: 13px; color: var(--muted); margin-top: 27px; }
+.crumb:hover { color: var(--ink); text-decoration: underline; }
+.price { font-size: 24px; font-weight: 700; color: var(--ink); }
+
+/* =========================================================
+   01 HOME (measured from the home frame, 1440 x 936)
+   ========================================================= */
+.home { padding: 0 0 0 16px; color: #333; }
+.home-hero { margin-right: 16px; }
+.home-hero { display: grid; grid-template-columns: minmax(0, 1fr) 542px; column-gap: 40px; margin-top: 37px; }
+.home-copy { padding-top: 0; }
+.home-copy h1 { font-size: 36px; line-height: 44px; color: #333; margin-top: 13px; letter-spacing: 0; }
+.home .lead { font-size: 19px; line-height: 23px; color: #333; margin-top: 17px; }
+.home-cta { width: 211px; height: 45px; margin-top: 38px; background: #333; border-color: #333; border-radius: 3px; font-size: 15px; font-weight: 700; padding-left: 16px; }
+.home .note { font-size: 17px; line-height: 20px; color: #333; margin-top: 13px; }
+.home-img { height: 251px; background: #f3f3f3; border: 1px solid #c9c9c9; }
+.home-img line { stroke: #c9c9c9; }
+.home-ideas { margin-top: 36px; }
+.home-ideas h2 { font-size: 25px; line-height: 30px; color: #333; letter-spacing: 0; }
+.home-ideas .sub { font-size: 17px; line-height: 20px; color: #333; margin-top: 13px; }
+.ideas { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; margin-top: 25px; margin-right: 0; }
+.idea { height: 288px; border: 1px solid #cacaca; border-radius: 3px; padding: 14px 15px 0 14px; }
+.idea-img { height: 132px; background: #f3f3f3; border: 1px solid #c9c9c9; }
+.idea-img line { stroke: #c9c9c9; }
+.idea h3 { font-size: 22px; line-height: 27px; color: #333; margin: 16px 0 0 6px; letter-spacing: 0; }
+.idea p { font-size: 16px; line-height: 20px; color: #333; margin: 12px 0 0 5px; }
+.text-link { display: block; background: none; border: 0; padding: 0; margin: 18px 0 0 5px; font-size: 16px; line-height: 20px; font-weight: 700; color: #333; }
+.text-link:hover { text-decoration: underline; }
+
+/* =========================================================
+   02 PREFERENCES FORM
+   ========================================================= */
+.plan { max-width: 1084px; margin: 0 auto; padding-top: 28px; }
+.plan h1 { font-size: 28px; line-height: 34px; margin-left: 20px; }
+.plan > .sub { margin: 14px 0 0 20px; }
+.plan-form { margin-top: 28px; background: var(--panel); border: 1px solid var(--line); border-radius: 4px; padding: 27px 32px 23px; }
+.f { display: flex; flex-direction: column; border: 0; margin: 0; padding: 0; min-width: 0; }
+.f label, .f legend { font-size: 13px; font-weight: 700; color: var(--ink); line-height: 16px; padding: 0; }
+.f-grid { display: grid; grid-template-columns: 473px 507px; column-gap: 40px; row-gap: 27px; }
+.fi { height: 45px; margin-top: 12px; background: #fff; border: 1px solid var(--line-dark); border-radius: 2px; padding: 0 15px; font-size: 14px; color: #555; width: 100%; display: flex; align-items: center; gap: 6px; }
+.fi input, .fi select { border: 0; background: none; padding: 0; color: #555; min-width: 0; }
+select.fi { display: block; }
+.fi-dates input { width: 130px; }
+.fi-dates span { color: #555; white-space: nowrap; }
+.fi-budget input { flex: 1; }
+.fi-budget span { white-space: nowrap; }
+.f-grid + fieldset { margin-top: 32px; }
+.interest-row { display: grid; grid-template-columns: repeat(4, 227px); gap: 18px; margin-top: 15px; }
+.ibox, .tx { position: relative; }
+.ibox input, .tx input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.ibox span { display: flex; align-items: center; height: 45px; padding: 0 12px; background: #fff; border: 1px solid var(--line-dark); border-radius: 2px; font-size: 13px; color: #555; cursor: pointer; }
+.ibox input:checked + span { background: var(--chip); border-color: var(--chip); }
+.on, .off { font-weight: 400; margin-right: 4px; }
+.on { display: none; }
+input:checked + span .on { display: inline; }
+input:checked + span .off { display: none; }
+.ibox input:focus-visible + span, .tx input:focus-visible + span { outline: 2px solid #000; outline-offset: 2px; }
+.interest-row ~ * {}
+fieldset.f + fieldset.f { margin-top: 23px; }
+.fi-radios { height: 53px; margin-top: 13px; gap: 26px; }
+.tx span { cursor: pointer; font-size: 14px; color: #555; }
+.needs { display: flex; gap: 16px; margin-top: 21px; }
+.plan-actions { display: flex; justify-content: space-between; margin-top: 42px; }
+.plan-back { width: 150px; }
+.plan-find { width: 232px; padding-left: 14px; }
+.err { font-size: 12px; color: #b42318; margin-top: 6px; }
+
+/* =========================================================
+   03 RECOMMENDATIONS
+   ========================================================= */
+.results { padding-top: 33px; }
+.results h1 { font-size: 28px; line-height: 34px; }
+.results .meta { margin-top: 17px; }
+.res-grid { display: grid; grid-template-columns: 278px minmax(0, 1fr); gap: 32px; margin-top: 30px; align-items: start; }
+.prefs { background: var(--panel); border: 1px solid var(--line); height: 588px; padding: 23px 22px 0 24px; }
+.prefs h3 { font-size: 18px; line-height: 22px; margin-bottom: 29px; }
+.prefs .k { font-size: 14px; font-weight: 700; color: var(--ink); line-height: 16px; }
+.prefs .v { font-size: 14px; color: var(--muted); line-height: 18px; margin-top: 19px; }
+.prefs .v + .v { margin-top: 19px; }
+.prefs hr { margin: 22px 0 21px; }
+.prefs .v + .k { margin-top: 25px; }
+.edit-prefs { width: 232px; height: 48px; margin: 32px 0 44px; }
+.prefs .muted { margin-top: 13px; line-height: 25px; }
+
+.res-head { display: flex; justify-content: space-between; align-items: center; height: 18px; margin-top: 16px; font-size: 14px; color: var(--ink); }
+.sort { font-size: 14px; color: var(--muted); margin-right: 225px; }
+.sort select { border: 0; background: none; color: var(--muted); padding: 0; appearance: none; -webkit-appearance: none; }
+.res-card { height: 153px; border: 1px solid var(--line); margin-top: 23px; padding: 15px 25px 15px 16px; display: grid; grid-template-columns: 190px minmax(0, 1fr) 170px; column-gap: 24px; align-items: center; }
+.res-card + .res-card { margin-top: 20px; }
+.res-img { height: 123px; }
+.res-body { align-self: start; padding-top: 0; }
+.res-body h3 { font-size: 20px; line-height: 24px; }
+.res-body p { font-size: 14px; color: var(--muted); margin-top: 11px; line-height: 18px; }
+.res-body p + p { margin-top: 11px; }
+.tick { background: none; border: 0; padding: 0; margin-top: 11px; font-size: 14px; color: var(--muted); line-height: 18px; }
+.tick:hover { color: var(--ink); }
+.res-btn { width: 170px; height: 48px; }
+.cmp-strip { margin-top: 25px; height: 40px; background: var(--strip); display: flex; align-items: center; justify-content: space-between; padding-left: 20px; font-size: 14px; font-weight: 700; color: var(--ink); }
+.strip-btn { background: none; border: 0; padding: 0; margin-right: 175px; font-weight: 700; font-size: 14px; color: var(--ink); }
+.strip-btn:hover:not([disabled]) { text-decoration: underline; }
+.strip-btn[disabled] { opacity: 0.45; cursor: not-allowed; }
+
+/* =========================================================
+   04 DESTINATION
+   ========================================================= */
+.dest h1 { font-size: 30px; line-height: 36px; margin-top: 20px; }
+.dest > .sub { margin-top: 11px; }
+.dest-grid { display: grid; grid-template-columns: 824px minmax(0, 1fr); gap: 34px; margin-top: 27px; align-items: start; }
+.dest-img { height: 257px; }
+.dest-thumbs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 21px; margin-top: 18px; }
+.dest-thumbs .ph { height: 97px; }
+.dest-main h3 { font-size: 18px; line-height: 22px; margin-top: 20px; }
+.dest-main .line { font-size: 14px; color: var(--muted); margin-top: 21px; line-height: 18px; }
+.dest-main hr { margin-top: 22px; }
+.dest-main hr + h3 { margin-top: 16px; }
+.dest-main hr + h3 + .line { margin-top: 17px; }
+.glance { background: var(--panel); border: 1px solid var(--line); min-height: 562px; padding: 20px 25px 8px; display: flex; flex-direction: column; }
+.glance h3 { font-size: 20px; line-height: 24px; }
+.g-dates { font-size: 14px; color: var(--muted); margin-top: 22px; }
+.glance .k { font-size: 13px; font-weight: 700; color: var(--ink); }
+.g-dates + .k { margin-top: 32px; }
+.glance .price { margin-top: 5px; line-height: 30px; }
+.g-note { font-size: 13px; color: var(--muted); margin-top: 12px; }
+.glance hr { margin: 22px 0 22px; }
+.g-v { font-size: 13px; color: var(--muted); margin-top: 16px; line-height: 16px; }
+.g-v + .k { margin-top: 24px; }
+.g-btn { height: 40px; margin-top: 30px; }
+.g-btn2 { height: 45px; margin-top: 15px; }
+
+/* =========================================================
+   05 COMPARE
+   ========================================================= */
+.compare h1, .itin h1, .trips h1, .route h1 { font-size: 26px; line-height: 32px; }
+.compare h1 { margin-top: 18px; }
+.compare .meta { margin-top: 18px; }
+.c-scroll { overflow-x: auto; margin-top: 30px; }
+.c-table { min-width: 900px; border: 1px solid #f0f0f0; }
+.c-row { display: grid; grid-template-columns: 230px repeat(2, minmax(0, 1fr)); }
+.c-label { background: #f5f5f5; padding: 16px 20px; font-size: 13px; font-weight: 700; color: var(--ink); }
+.c-cell { padding: 16px 22px 16px 17px; border-bottom: 1px solid #ececec; border-left: 1px solid #f0f0f0; font-size: 13px; color: var(--muted); line-height: 20px; min-width: 0; }
+.c-head .c-cell { padding-top: 18px; height: 275px; }
+.c-img { height: 167px; }
+.c-head h3 { font-size: 18px; line-height: 22px; margin-top: 11px; }
+.c-sub { font-size: 13px; color: var(--muted); margin-top: 14px; }
+.c-cost .c-cell { height: 78px; }
+.c-cost strong { color: var(--ink); font-size: 15px; }
+.c-cost .c-sub { margin-top: 4px; }
+.c-time .c-cell { height: 50px; }
+.c-trans .c-cell { height: 72px; }
+.c-acts .c-cell { height: 100px; }
+.c-actions .c-cell { height: 100px; border-bottom: 0; display: flex; align-items: center; gap: 13px; padding-top: 0; padding-bottom: 0; }
+.c-choose { flex: 1; height: 53px; }
+.c-remove { width: 95px; height: 53px; }
+.cmp-empty { margin-top: 30px; padding: 40px; background: var(--panel); border: 1px solid var(--line); display: flex; flex-direction: column; align-items: center; gap: 16px; font-size: 14px; }
+
+/* =========================================================
+   06 ITINERARY
+   ========================================================= */
+.itin h1 { margin-top: 20px; }
+.itin .meta { margin-top: 18px; }
+.itin-grid { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 28px; margin-top: 26px; align-items: start; }
+.day-tabs, .route-tabs { display: flex; gap: 10px; }
+.dtab { height: 44px; padding: 0 22px; background: #fff; border: 1px solid var(--line-dark); border-radius: 2px; font-size: 13px; color: var(--ink); }
+.dtab[aria-selected="true"] { background: var(--btn); border-color: var(--btn); color: #fff; }
+.sched { margin-top: 13px; border: 1px solid #f0f0f0; }
+.slot { height: 77px; display: grid; grid-template-columns: 100px minmax(0, 1fr) 134px; align-items: center; padding: 0 18px; border-bottom: 1px solid #f0f0f0; column-gap: 0; }
+.slot:last-child { border-bottom: 0; }
+.slot-empty { display: flex; color: var(--muted); }
+.s-time { font-size: 13px; color: var(--muted); }
+.s-body { display: flex; flex-direction: column; gap: 6px; min-width: 0; padding-right: 16px; }
+.s-body strong { font-size: 14px; color: var(--ink); }
+.s-body span { font-size: 13px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.s-btn { height: 36px; font-size: 12px; font-weight: 500; padding: 0 12px; }
+.add-act { width: 100%; height: 55px; margin-top: 18px; background: #fafafa; border: 1px dashed var(--line-dark); font-size: 13px; color: var(--muted); }
+.add-act:hover { color: var(--ink); border-color: var(--ink); }
+.adder { margin-top: 18px; border: 1px dashed var(--line-dark); background: #fafafa; padding: 14px 18px; display: flex; flex-direction: column; gap: 8px; }
+.adder-head { display: flex; justify-content: space-between; align-items: center; color: var(--ink); }
+.adder-item { display: flex; justify-content: space-between; align-items: center; gap: 12px; background: #fff; border: 1px solid #ececec; padding: 8px 12px; }
+.adder-item strong { display: block; color: var(--ink); font-size: 14px; }
+.adder-item span { font-size: 12px; color: var(--muted); }
+.adder-item .s-btn { width: 70px; }
+.tsum { background: #fff; border: 1px solid #ececec; padding: 21px 23px 20px 22px; display: flex; flex-direction: column; margin-top: 2px; }
+.tsum h3 { font-size: 16px; line-height: 20px; }
+.t-sub { font-size: 13px; color: var(--muted); margin-top: 23px; }
+.tsum hr { margin: 16px 0 18px; border-color: #f2f2f2; }
+.t-rows { display: flex; flex-direction: column; gap: 12px; }
+.t-rows p { display: flex; justify-content: space-between; font-size: 13px; color: var(--muted); line-height: 16px; }
+.t-k { font-size: 12px; color: var(--muted); }
+.tsum .price { font-size: 22px; line-height: 28px; margin-top: 8px; }
+.t-v { font-size: 12.5px; color: var(--muted); margin-top: 8px; }
+.t-k2 { font-size: 13px; font-weight: 700; color: var(--ink); }
+.t-btn { width: 100%; height: 43px; margin-top: 22px; }
+.t-save { height: 52px; margin-top: 23px; }
+
+/* =========================================================
+   07 ROUTE
+   ========================================================= */
+.route-head { display: flex; justify-content: space-between; align-items: flex-start; padding-top: 30px; }
+.route .meta { margin-top: 20px; }
+.route-tabs { margin-top: 10px; }
+.route-tabs .dtab { width: 80px; padding: 0; height: 43px; }
+.route-grid { display: grid; grid-template-columns: 430px minmax(0, 1fr); gap: 25px; margin-top: 22px; align-items: start; }
+.stops { border: 1px solid #ececec; min-height: 600px; }
+.stop { height: 76px; display: flex; align-items: center; gap: 15px; padding: 0 20px; }
+.num { flex: none; width: 30px; height: 30px; border: 1px solid #bdbdbd; border-radius: 50%; display: grid; place-items: center; font-size: 11px; font-weight: 600; color: var(--muted); }
+.stop strong { display: block; font-size: 13px; color: var(--ink); }
+.stop span:not(.num) { display: block; font-size: 12px; color: var(--muted); margin-top: 6px; }
+.leg { height: 30px; background: #f4f4f4; display: flex; align-items: center; padding-left: 65px; font-size: 12px; color: var(--muted); }
+.route-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 30px; }
+.route-btns .btn { height: 48px; }
+.map { position: relative; height: 680px; background: #efefef; border: 1px solid #e6e6e6; overflow: hidden; }
+.map-svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.map-tag { position: absolute; left: 22px; top: 21px; width: 130px; height: 30px; display: flex; align-items: center; padding-left: 10px; background: #fff; border: 1px solid #e2e2e2; font-size: 12px; color: var(--muted); }
+.map-legend { position: absolute; left: 22px; bottom: 22px; width: 243px; min-height: 60px; background: #fff; border: 1px solid #e2e2e2; padding: 10px 14px; display: flex; flex-direction: column; gap: 6px; font-size: 12px; color: var(--muted); }
+.map-legend strong { color: var(--ink); font-size: 12px; }
+.zoom { position: absolute; right: 20px; bottom: 22px; width: 48px; display: flex; flex-direction: column; background: #fff; border: 1px solid #e2e2e2; }
+.zoom button { height: 50px; border: 0; background: #fff; font-size: 16px; color: var(--ink); }
+.zoom button + button { border-top: 1px solid #e2e2e2; }
+
+/* =========================================================
+   08 MY TRIPS
+   ========================================================= */
+.trips-head { display: flex; justify-content: space-between; align-items: flex-start; padding-top: 32px; }
+.trips .sub { font-size: 13px; margin-top: 18px; }
+.new-trip { width: 171px; height: 42px; margin-top: 8px; }
+.trip-tabs { display: flex; gap: 27px; margin-top: 27px; border-bottom: 1px solid #ececec; }
+.trip-tabs button { background: none; border: 0; border-bottom: 3px solid transparent; padding: 0 0 12px; margin-bottom: -1px; font-size: 13px; color: var(--muted); }
+.trip-tabs button[aria-selected="true"] { color: var(--ink); font-weight: 600; border-color: var(--ink); }
+.trip-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; margin-top: 26px; }
+.trip { border: 1px solid #ececec; padding: 15px 15px 16px; display: flex; flex-direction: column; }
+.trip.draft { border: 1px dashed #cfcfcf; }
+.trip-img { height: 190px; }
+.trip-top { display: flex; justify-content: space-between; align-items: center; margin-top: 13px; }
+.trip-top h3 { font-size: 16px; }
+.badge { width: 80px; height: 20px; border: 1px solid #cfcfcf; display: grid; place-items: center; font-size: 11px; color: var(--muted); }
+.trip p { font-size: 13px; color: var(--muted); margin-top: 13px; line-height: 16px; }
+.trip p + p { margin-top: 9px; }
+.trip p strong { color: var(--ink); margin-left: 20px; }
+.trip-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 24px; }
+.trip-btns .btn { height: 50px; }
+.trips-empty { margin-top: 26px; padding: 40px; border: 1px dashed #cfcfcf; text-align: center; color: var(--muted); }
+
+/* ---------- toast ---------- */
+.toast { position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); z-index: 30; background: #222; color: #fff; border-radius: 3px; padding: 10px 10px 10px 16px; display: flex; align-items: center; gap: 12px; box-shadow: 0 8px 24px rgba(0,0,0,.2); max-width: calc(100vw - 32px); font-size: 13px; }
+.toast .btn { background: #fff; color: #222; height: 34px; }
+.toast .x { background: none; border: 0; color: #fff; opacity: .7; font-size: 18px; padding: 2px 8px; }
+
+/* ---------- frames 05–08: shorter header, content from x = 52 to 1388 ---------- */
+@media (min-width: 1024px) {
+  .frame-b .wrap { padding-left: 52px; padding-right: 52px; }
+  .frame-b .bar { height: 72px; }
+  .frame-b .nav { gap: 95px; padding-right: 13px; }
+  .frame-b .crumb { margin-top: 30px; }
+}
+
+/* ---------- smaller screens: keep the same pieces, stack them ---------- */
+@media (max-width: 1023px) {
+  .wrap { padding-left: max(24px, env(safe-area-inset-left, 0px)); padding-right: max(24px, env(safe-area-inset-right, 0px)); }
+  .nav { gap: 48px; padding-right: 0; }
+  .f-grid { grid-template-columns: 1fr 1fr; }
+  .interest-row { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .dest-grid { grid-template-columns: minmax(0, 1fr) 380px; }
+  .sort, .strip-btn { margin-right: 16px; }
+  .ideas { margin-right: 0; }
+}
+@media (max-width: 900px) {
+  .home-hero, .res-grid, .dest-grid, .itin-grid, .route-grid { grid-template-columns: 1fr; }
+  .home-img { height: 220px; }
+  .prefs, .glance { height: auto; min-height: 0; padding-bottom: 20px; }
+  .ideas, .trip-cards { grid-template-columns: 1fr 1fr; }
+  .stops { min-height: 0; }
+  .map { height: 460px; }
+}
+@media (max-width: 620px) {
+  .wrap { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  .bar { height: auto; padding-block: 16px; flex-wrap: wrap; gap: 10px; }
+  .nav { gap: 24px; }
+  .home { padding-inline: 0; }
+  .ideas, .trip-cards, .f-grid, .dest-thumbs { grid-template-columns: 1fr; }
+  .interest-row { grid-template-columns: 1fr 1fr; }
+  .plan-form { padding: 20px; }
+  .fi-dates { height: auto; flex-wrap: wrap; padding: 8px 12px; }
+  .fi-radios { height: auto; flex-wrap: wrap; gap: 10px 20px; padding: 12px; }
+  .res-card { height: auto; grid-template-columns: 100px minmax(0, 1fr); }
+  .res-img { height: 80px; }
+  .res-btn { grid-column: 1 / -1; width: 100%; margin-top: 12px; }
+  .slot { height: auto; padding: 12px; grid-template-columns: 80px minmax(0, 1fr); row-gap: 8px; }
+  .s-btn { grid-column: 2; justify-self: start; }
+  .route-head, .trips-head { flex-direction: column; gap: 16px; }
+}
+
+</style>
 </head>
 <body>
 <header class="top">
@@ -24,6 +386,585 @@
 </header>
 <main class="wrap" id="app"></main>
 <div id="toast-slot" role="status" aria-live="polite"></div>
-<script src="script.js"></script>
+<script>
+/* ---------------- data ---------------- */
+const DESTS = {
+  hudson:{id:"hudson",short:"Arts, cafes, and a quiet weekend",sub:"A weekend of art, local food, and river views.",todo:"Explore galleries | Walk by the river | Visit local cafes",review:"A relaxed weekend with easy train access.",accessShort:"Flat, walkable center | some sites have stairs",transLine:"Train from Moynihan Train Hall (Amtrak)",transLine2:"Walkable from Hudson station",name:"Hudson",state:"NY",tagline:"Art, cafés, and a quiet river-town weekend.",
+    blurb:"A weekend of galleries, local food, and river views at the north end of the Hudson Valley.",
+    tags:["art","food","shopping"],room:180,
+    travel:{train:{t:"About 2 hr",mins:120,how:"Amtrak Empire Service from Moynihan Train Hall to Hudson",cost:74},
+            car:{t:"About 2 hr 15 min",mins:135,how:"Taconic State Parkway, then NY-23B into town",cost:40}},
+    weather:"Late October highs are usually in the upper 50s °F with nights near 40 °F. Pack a warm layer.",
+    access:"Warren Street is flat and an easy walk from the station. Olana's grounds are hilly and the house tour has stairs.",
+    pets:"Riverfront Park and many Warren Street shops welcome leashed dogs.",
+    scene:{sky:["#f4d8a6","#8fb6c4"],hills:["#8a9a62","#5f7148","#3e4f36"],river:"#6a93a3",leaves:["#c9772b","#d9a531","#a8452a"]},
+    acts:[
+      {id:"h-arr",name:"Arrive at Hudson station",kind:"Transit",mins:15,cost:0,lat:42.2536,lng:-73.7985,note:"A five-minute walk up to Warren Street."},
+      {id:"h-dep",name:"Train home from Hudson station",kind:"Transit",mins:15,cost:0,lat:42.2536,lng:-73.7985,note:"Arrive 15 minutes early; the platform is across the tracks."},
+      {id:"h-warren",name:"Warren Street galleries & antiques",kind:"Art",mins:120,cost:0,lat:42.2500,lng:-73.7880,note:"Walk the length of Warren Street from Front Street to 7th."},
+      {id:"h-river",name:"Sunset at Hudson Riverfront Park",kind:"Nature",mins:45,cost:0,lat:42.2532,lng:-73.7998,note:"Views across to the Hudson–Athens Lighthouse."},
+      {id:"h-wm",name:"Dinner at Wm. Farmer and Sons",kind:"Food",mins:90,cost:55,lat:42.2522,lng:-73.7972,note:"Reserve ahead for Friday nights."},
+      {id:"h-perche",name:"Breakfast at Café Le Perche",kind:"Food",mins:60,cost:22,lat:42.2494,lng:-73.7873,note:"Bakery and café on Warren Street."},
+      {id:"h-olana",name:"Olana State Historic Site",kind:"History",mins:150,cost:20,lat:42.2178,lng:-73.8291,note:"Frederic Church's hilltop home. Book the house tour ahead."},
+      {id:"h-grazin",name:"Lunch at Grazin' Diner",kind:"Food",mins:60,cost:20,lat:42.2502,lng:-73.7900,note:"Classic diner with local, grass-fed beef."},
+      {id:"h-basilica",name:"Basilica Hudson",kind:"Art",mins:60,cost:0,lat:42.2540,lng:-73.7975,note:"Check the calendar; some weekends host markets or shows."},
+      {id:"h-debs",name:"Dinner at Lil' Deb's Oasis",kind:"Food",mins:90,cost:45,lat:42.2470,lng:-73.7830,note:"Colorful, tropical-leaning menu."},
+      {id:"h-trail",name:"Greenport Conservation Area trails",kind:"Nature",mins:90,cost:0,lat:42.2350,lng:-73.7800,note:"Easy loops with river and Catskills views."},
+      {id:"h-kittys",name:"Lunch at Kitty's Market",kind:"Food",mins:50,cost:18,lat:42.2528,lng:-73.7980,note:"Steps from the station; good before your train."},
+      {id:"h-cole",name:"Thomas Cole National Historic Site",kind:"History",mins:90,cost:18,lat:42.2253,lng:-73.8650,note:"Across the Rip Van Winkle Bridge in Catskill. Needs a car or taxi."}
+    ],
+    plan:[[["15:30","h-arr"],["16:00","h-warren"],["18:15","h-river"],["19:30","h-wm"]],
+          [["09:00","h-perche"],["10:30","h-olana"],["13:30","h-grazin"],["15:00","h-basilica"],["19:00","h-debs"]],
+          [["10:00","h-trail"],["12:30","h-kittys"],["14:30","h-dep"]]],
+    reviews:[["Spent most of Saturday on Warren Street and still didn't see every gallery. Olana at sunset was the highlight.","Weekend in October"],
+             ["Easy by train. We never needed a car except for the Thomas Cole site.","Couple, no car"]]
+  },
+  beacon:{id:"beacon",short:"Art, walking, and local food",sub:"A weekend of big art, a ridge hike, and a walkable Main Street.",todo:"Visit Dia Beacon | Hike Mount Beacon | Browse Main Street",review:"Dia took a whole afternoon and it was worth it.",accessShort:"Dia is step-free | Main Street has gentle hills",transLine:"Train from Grand Central (Metro-North)",transLine2:"Free loop bus to Main Street",name:"Beacon",state:"NY",tagline:"Big art, a steep hike, and a walkable Main Street.",
+    blurb:"A short train ride to Dia Beacon, Mount Beacon's fire tower, and a mile of shops and cafés.",
+    tags:["art","nature","food"],room:170,
+    travel:{train:{t:"About 1 hr 30 min",mins:90,how:"Metro-North Hudson Line from Grand Central to Beacon",cost:33},
+            car:{t:"About 1 hr 30 min",mins:90,how:"Taconic State Parkway or I-84 via the Newburgh–Beacon Bridge",cost:28}},
+    weather:"Late October highs are usually around 60 °F. The Mount Beacon summit is windier and cooler.",
+    access:"Dia Beacon is fully step-free. Main Street climbs gently from the river; a free loop bus links the station and Main Street.",
+    pets:"Dia does not allow pets. Long Dock Park and most Main Street patios are dog-friendly.",
+    scene:{sky:["#f1c9a0","#a3b9cf"],hills:["#7c8f6b","#57704f","#38493a"],river:"#7898ad",leaves:["#d0822e","#e0b03c","#9c3f2a"]},
+    acts:[
+      {id:"b-arr",name:"Arrive at Beacon station",kind:"Transit",mins:15,cost:0,lat:41.5048,lng:-73.9848,note:"Dia is a ten-minute walk; the loop bus goes up to Main Street."},
+      {id:"b-dep",name:"Train home from Beacon station",kind:"Transit",mins:15,cost:0,lat:41.5048,lng:-73.9848,note:"Weekend trains run about once an hour."},
+      {id:"b-main",name:"Main Street shops and galleries",kind:"Shopping",mins:120,cost:0,lat:41.5043,lng:-73.9690,note:"Independent bookstores, record shops, and galleries."},
+      {id:"b-dock",name:"Long Dock Park at sunset",kind:"Nature",mins:45,cost:0,lat:41.5080,lng:-73.9875,note:"Riverfront park beside the station."},
+      {id:"b-dinner",name:"Dinner on Main Street",kind:"Food",mins:90,cost:45,lat:41.5043,lng:-73.9660,note:"Plenty of options from ramen to farm-to-table."},
+      {id:"b-bank",name:"Coffee at Bank Square Coffeehouse",kind:"Food",mins:45,cost:9,lat:41.5023,lng:-73.9800,note:"At the west end of Main Street."},
+      {id:"b-mtn",name:"Mount Beacon hike",kind:"Nature",mins:150,cost:0,lat:41.4930,lng:-73.9590,note:"Steep stairs to the fire tower, about 4 miles round trip."},
+      {id:"b-pantry",name:"Lunch at Beacon Pantry",kind:"Food",mins:60,cost:22,lat:41.5047,lng:-73.9693,note:"Sandwiches, cheese, and a small café."},
+      {id:"b-dia",name:"Dia Beacon",kind:"Art",mins:180,cost:20,lat:41.4999,lng:-73.9829,note:"Large-scale art in a former box-printing factory by the river."},
+      {id:"b-bannerman",name:"Bannerman Castle island tour",kind:"History",mins:150,cost:45,lat:41.5070,lng:-73.9870,note:"Boat leaves from the Beacon dock. Seasonal; tours end in early November."},
+      {id:"b-howland",name:"Howland Cultural Center",kind:"Art",mins:60,cost:0,lat:41.5050,lng:-73.9625,note:"Exhibits and concerts in an 1872 library building."},
+      {id:"b-brett",name:"Madam Brett Park and Fishkill Creek",kind:"Nature",mins:60,cost:0,lat:41.4987,lng:-73.9655,note:"Short, flat walk along the creek and marsh."}
+    ],
+    plan:[[["15:30","b-arr"],["16:00","b-main"],["17:45","b-dock"],["19:00","b-dinner"]],
+          [["08:30","b-bank"],["09:30","b-mtn"],["12:30","b-pantry"],["14:00","b-dia"]],
+          [["10:00","b-bannerman"],["13:00","b-howland"],["14:30","b-dep"]]],
+    reviews:[["Dia took longer than we planned, in a good way. Leave a full afternoon.","First visit"],
+             ["The Mount Beacon stairs are no joke, but the view from the fire tower is worth it.","Hiking weekend"]]
+  },
+  coldspring:{id:"coldspring",short:"River views and easy walks",sub:"A weekend of trails, antique shops, and river views.",todo:"Hike the Highlands | Browse antique shops | Relax on the riverfront",review:"Everything is a few minutes from the train.",accessShort:"Short Main Street | trails are steep",transLine:"Train from Grand Central (Metro-North)",transLine2:"Main Street starts at the station",name:"Cold Spring",state:"NY",tagline:"Trails, river views, and an easy Main Street.",
+    blurb:"A small village under the Hudson Highlands with antique shops, ridge hikes, and a riverfront bandstand.",
+    tags:["nature","shopping","art"],room:175,
+    travel:{train:{t:"About 1 hr 20 min",mins:80,how:"Metro-North Hudson Line from Grand Central to Cold Spring",cost:30},
+            car:{t:"About 1 hr 15 min",mins:75,how:"Taconic State Parkway, then NY-301 west",cost:28}},
+    weather:"Late October highs are usually around 60 °F. Ridge trails can be slick after rain.",
+    access:"Main Street is short and walkable but slopes down to the river. Breakneck Ridge is a rock scramble and not accessible.",
+    pets:"Leashed dogs are welcome on most Hudson Highlands trails and on the riverfront.",
+    scene:{sky:["#f0d2b0","#9fb7c0"],hills:["#6f845c","#4f6544","#334433"],river:"#6c8f9c",leaves:["#b9622a","#dca23a","#8f3a26"]},
+    acts:[
+      {id:"c-arr",name:"Arrive at Cold Spring station",kind:"Transit",mins:15,cost:0,lat:41.4153,lng:-73.9585,note:"Main Street starts right at the station."},
+      {id:"c-dep",name:"Train home from Cold Spring station",kind:"Transit",mins:15,cost:0,lat:41.4153,lng:-73.9585,note:"Sunday afternoon trains fill up; board early."},
+      {id:"c-main",name:"Main Street antiques",kind:"Shopping",mins:120,cost:0,lat:41.4200,lng:-73.9540,note:"Antique shops and small galleries along one walkable street."},
+      {id:"c-dock",name:"Riverfront and bandstand",kind:"Nature",mins:40,cost:0,lat:41.4185,lng:-73.9595,note:"Views straight across to Storm King."},
+      {id:"c-dinner",name:"Dinner on Main Street",kind:"Food",mins:90,cost:45,lat:41.4203,lng:-73.9520,note:"Book Saturday dinners ahead in fall."},
+      {id:"c-hils",name:"Breakfast at Hudson Hil's",kind:"Food",mins:60,cost:20,lat:41.4199,lng:-73.9533,note:"Popular; expect a short wait on weekends."},
+      {id:"c-breakneck",name:"Breakneck Ridge hike",kind:"Nature",mins:210,cost:0,lat:41.4441,lng:-73.9785,note:"Very steep scramble. Check trail status first; sections close for Fjord Trail work."},
+      {id:"c-lunch",name:"Picnic lunch from Main Street",kind:"Food",mins:45,cost:15,lat:41.4195,lng:-73.9550,note:"Pick up sandwiches and eat on the riverfront."},
+      {id:"c-magazzino",name:"Magazzino Italian Art",kind:"Art",mins:120,cost:0,lat:41.4316,lng:-73.9124,note:"Free with a reservation. A short taxi ride from the village."},
+      {id:"c-boscobel",name:"Boscobel House and Gardens",kind:"History",mins:120,cost:22,lat:41.4120,lng:-73.9390,note:"Restored 1800s house with a lawn over the river."},
+      {id:"c-marsh",name:"Constitution Marsh Audubon Center",kind:"Nature",mins:90,cost:0,lat:41.4040,lng:-73.9440,note:"Boardwalk through a tidal marsh; good for birding."},
+      {id:"c-stony",name:"Little Stony Point",kind:"Nature",mins:60,cost:0,lat:41.4277,lng:-73.9663,note:"Short loop with a small beach and big views."}
+    ],
+    plan:[[["15:00","c-arr"],["15:20","c-main"],["17:30","c-dock"],["19:00","c-dinner"]],
+          [["08:30","c-hils"],["09:45","c-breakneck"],["13:45","c-lunch"],["15:00","c-magazzino"]],
+          [["10:00","c-boscobel"],["12:30","c-marsh"],["14:30","c-dep"]]],
+    reviews:[["Everything is a few minutes from the train. Perfect if you don't want to drive.","Car-free weekend"],
+             ["We skipped Breakneck and did Little Stony Point instead. Much gentler, still beautiful.","Easy hikers"]]
+  }
+};
+const ORDER=["hudson","beacon","coldspring"];
+const INTERESTS=[["art","Art & culture"],["food","Local food"],["nature","Nature"],["shopping","Shopping"]];
+const KIND_INTEREST={Art:"art",History:"art",Food:"food",Nature:"nature",Shopping:"shopping"};
+const TRANSPORT={car:"Car",train:"No car / Public transit",any:"Flexible"};
+const TRANSPORT_SHORT={car:"Car",train:"No car",any:"Flexible"};
+const TRANSPORT_SHORT_SIDE={car:"Car",train:"Public transit",any:"Flexible"};
+
+/* ---------------- helpers ---------------- */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const money=n=>"$"+Math.round(n).toLocaleString("en-US");
+const clone=o=>JSON.parse(JSON.stringify(o));
+const pd=s=>{const [y,m,d]=s.split("-").map(Number);return new Date(y,m-1,d)};
+const iso=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+const addDays=(s,n)=>{const d=pd(s);d.setDate(d.getDate()+n);return iso(d)};
+const fmt=(s,o={month:"short",day:"numeric"})=>pd(s).toLocaleDateString("en-US",o);
+const range=(a,b)=>`${fmt(a)} – ${fmt(b)}`;
+const dayCount=p=>Math.round((pd(p.end)-pd(p.start))/864e5)+1;
+const toMin=t=>{const [h,m]=t.split(":").map(Number);return h*60+m};
+const toT=m=>`${String(Math.floor(m/60)%24).padStart(2,"0")}:${String(m%60).padStart(2,"0")}`;
+const clock=t=>{const m=toMin(t),h=Math.floor(m/60),mm=m%60;return `${(h%12)||12}:${String(mm).padStart(2,"0")} ${h<12?"AM":"PM"}`};
+const dur=m=>m>=60?`${Math.floor(m/60)} hr${m%60?` ${m%60} min`:""}`:`${m} min`;
+const act=(d,id)=>d.acts.find(a=>a.id===id);
+const mode=p=>p.transport==="car"?"car":"train";
+const plural=(n,w)=>`${n} ${w}${n===1?"":"s"}`;
+
+function defaultPlan(d,n){
+  const t=d.plan.map(day=>day.map(([t,a])=>({t,a})));
+  if(n<=2) return [t[0],t[2]];
+  const days=[t[0],t[1]];
+  for(let i=3;i<n;i++) days.push([]);
+  days.push(t[2]); return days;
+}
+function costFor(d,prefs,days){
+  const n=days.length,nights=Math.max(0,n-1),tr=prefs.travelers;
+  const transport=d.travel[mode(prefs)].cost;
+  const stay=Math.round(d.room*nights*Math.ceil(tr/2)/tr);
+  let food=15*n,acts=0;
+  days.flat().forEach(it=>{const a=act(d,it.a);if(!a)return;if(a.kind==="Food")food+=a.cost;else acts+=a.cost});
+  return {transport,stay,food,acts,total:transport+stay+food+acts};
+}
+function matchInfo(d,prefs){
+  const hits=prefs.interests.filter(i=>d.tags.includes(i));
+  const c=costFor(d,prefs,defaultPlan(d,dayCount(prefs)));
+  const within=c.total<=prefs.budget;
+  const score=hits.length*3+(within?3:0)-d.travel[mode(prefs)].mins/60;
+  return {hits,cost:c,within,score};
+}
+
+/* ---------------- wireframe pieces ---------------- */
+// Gray image box with an X through it and a centered label
+function ph(label, cls = "") {
+  return `<div class="ph ${cls}" role="img" aria-label="${esc(label)}">
+    <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg>
+    <span>${esc(label)}</span></div>`;
+}
+const interestLabel = id => INTERESTS.find(i => i[0] === id)[1];
+const shortRange = (a, b) => { const A = pd(a), B = pd(b); return A.getMonth() === B.getMonth() ? `${fmt(a)}–${B.getDate()}` : `${fmt(a)}–${fmt(b)}`; };
+const box = on => on ? "[x]" : "[ ]";
+
+/* ---------------- 01 Home ---------------- */
+function vHome() {
+  return `<div class="home">
+  <section class="home-hero">
+    <div class="home-copy">
+      <h1>A long weekend. A trip that fits you.</h1>
+      <p class="lead">Find a short getaway based on your time, budget, and how you travel.</p>
+      <button class="btn btn-primary btn-left home-cta" data-go="plan">Plan a Trip</button>
+      <p class="note">No car? Explore trips by train or bus.</p>
+    </div>
+    ${ph("Destination image", "home-img")}
+  </section>
+  <section class="home-ideas">
+    <h2>Explore weekend ideas</h2>
+    <p class="sub">Start with an idea, or enter your preferences for matching trips.</p>
+    <div class="ideas">${ORDER.map(id => { const d = DESTS[id]; return `
+      <article class="idea">
+        ${ph("Image placeholder", "idea-img")}
+        <h3>${d.name}</h3>
+        <p>${esc(d.short)}</p>
+        <button class="text-link" data-dest="${id}">Explore destination</button>
+      </article>`; }).join("")}</div>
+  </section></div>`;
+}
+
+/* ---------------- 02 Preferences ---------------- */
+function vPlan() {
+  const p = S.prefs, e = S.errors;
+  return `<div class="plan">
+  <h1>Tell us about your trip</h1>
+  <p class="sub">We will use your choices to find suitable destinations.</p>
+  <form class="plan-form" id="plan-form" novalidate>
+    <div class="f-grid">
+      <div class="f"><label for="f-from">Starting location</label><input class="fi" id="f-from" value="${esc(p.from)}"></div>
+      <div class="f"><label for="f-start">Travel dates</label>
+        <div class="fi fi-dates"><input type="date" id="f-start" value="${p.start}" aria-label="Start date"><span>–</span><input type="date" id="f-end" value="${p.end}" aria-label="End date"><span id="f-days">| ${plural(dayCount(p), "day")}</span></div>
+        ${e.dates ? `<span class="err">${e.dates}</span>` : ""}</div>
+      <div class="f"><label for="f-budget">Budget per person</label><div class="fi fi-budget"><span>Up to $</span><input type="number" min="100" step="10" id="f-budget" value="${p.budget}"></div>${e.budget ? `<span class="err">${e.budget}</span>` : ""}</div>
+      <div class="f"><label for="f-trav">Number of travelers</label><select class="fi" id="f-trav">${[1,2,3,4,5,6].map(n => `<option value="${n}" ${n == p.travelers ? "selected" : ""}>${plural(n, "adult")}</option>`).join("")}</select></div>
+    </div>
+    <fieldset class="f"><legend>Interests</legend>
+      <div class="interest-row">${INTERESTS.map(([v, l]) => `<label class="ibox"><input type="checkbox" name="interest" value="${v}" ${p.interests.includes(v) ? "checked" : ""}><span><b class="on">[x]</b><b class="off">[ ]</b> ${l}</span></label>`).join("")}</div></fieldset>
+    <fieldset class="f"><legend>Transportation</legend>
+      <div class="fi fi-radios">${Object.entries(TRANSPORT).map(([v, l]) => `<label class="tx"><input type="radio" name="transport" value="${v}" ${p.transport === v ? "checked" : ""}><span><b class="on">(x)</b><b class="off">( )</b> ${l}</span></label>`).join("")}</div></fieldset>
+    <fieldset class="f"><legend>Additional needs (optional)</legend>
+      <div class="needs">${[["access", "Step-free access"], ["pet", "Traveling with a pet"]].map(([v, l]) => `<label class="tx"><input type="checkbox" name="need" value="${v}" ${p.needs.includes(v) ? "checked" : ""}><span><b class="on">[x]</b><b class="off">[ ]</b> ${l}</span></label>`).join("")}</div></fieldset>
+    <div class="plan-actions"><button type="button" class="btn btn-secondary btn-left plan-back" data-go="home">&lt; Back</button><button type="submit" class="btn btn-primary btn-left plan-find">Find Trips</button></div>
+  </form></div>`;
+}
+
+const prefLine = p => `<p class="meta">NYC | ${shortRange(p.start, p.end)} | ${plural(p.travelers, "traveler")} | Up to ${money(p.budget)}/person | ${TRANSPORT_SHORT[p.transport]}</p>`;
+
+/* ---------------- 03 Recommendations ---------------- */
+function vResults() {
+  const p = S.prefs;
+  let list = ORDER.map(id => ({ d: DESTS[id], ...matchInfo(DESTS[id], p) }));
+  if (S.sort === "match") list.sort((a, b) => b.score - a.score);
+  if (S.sort === "cost") list.sort((a, b) => a.cost.total - b.cost.total);
+  if (S.sort === "time") list.sort((a, b) => a.d.travel[mode(p)].mins - b.d.travel[mode(p)].mins);
+  const n = S.compare.length;
+  return `<div class="results">
+  <h1>Trips that fit your weekend</h1>
+  ${prefLine(p)}
+  <div class="res-grid">
+    <aside class="prefs">
+      <h3>Your preferences</h3>
+      <p class="k">Budget / person</p><p class="v">Up to ${money(p.budget)}</p>
+      <hr>
+      <p class="k">Transportation</p><p class="v">[x] ${TRANSPORT_SHORT_SIDE[p.transport]}</p>
+      <p class="k">Interests</p>${p.interests.length ? p.interests.map(i => `<p class="v">[x] ${interestLabel(i)}</p>`).join("") : `<p class="v">[ ] None selected</p>`}
+      <button class="btn btn-secondary btn-left edit-prefs" data-go="plan">Edit Preferences</button>
+      <p class="k">No suitable results?</p><p class="v muted">Try changing dates<br>or your budget.</p>
+    </aside>
+    <section class="res-main">
+      <div class="res-head"><strong>${list.length} matching destinations</strong>
+        <label class="sort">Sort: <select id="sort" aria-label="Sort"><option value="match" ${S.sort === "match" ? "selected" : ""}>Best match</option><option value="cost" ${S.sort === "cost" ? "selected" : ""}>Lowest cost</option><option value="time" ${S.sort === "time" ? "selected" : ""}>Shortest travel</option></select></label></div>
+      ${list.map(x => { const d = x.d, sel = S.compare.includes(d.id), tv = d.travel[mode(p)]; return `
+      <article class="res-card">
+        ${ph("Photo", "res-img")}
+        <div class="res-body">
+          <h3>${d.name}</h3>
+          <p>${money(x.cost.total)}/person estimated | ${tv.t}${x.within ? "" : " | Over budget"}</p>
+          <p>Reachable by ${mode(p)} | Weekend activities</p>
+          <button class="tick" data-cmptoggle="${d.id}" aria-pressed="${sel}">${box(sel)} Compare</button>
+        </div>
+        <button class="btn btn-secondary res-btn" data-detail="${d.id}">View Details</button>
+      </article>`; }).join("")}
+      <div class="cmp-strip">
+        <span>${n ? `${n} selected: ${S.compare.map(id => DESTS[id].name).join(" + ")}` : "0 selected: choose two to compare"}</span>
+        <button class="strip-btn" data-go="compare" ${n < 2 ? "disabled" : ""}>Compare (${n})</button>
+      </div>
+    </section>
+  </div></div>`;
+}
+
+/* ---------------- 04 Destination ---------------- */
+function vDest() {
+  const d = DESTS[S.destId], p = S.prefs, m = matchInfo(d, p), tv = d.travel[mode(p)], inCmp = S.compare.includes(d.id);
+  return `<div class="dest">
+  <button class="crumb" data-go="results">&lt; Back to Recommendations</button>
+  <h1>${d.name}, New York</h1>
+  <p class="sub">${esc(d.sub)}</p>
+  <div class="dest-grid">
+    <div class="dest-main">
+      ${ph("Main destination photo", "dest-img")}
+      <div class="dest-thumbs">${ph("Photo")}${ph("Photo")}${ph("Photo")}</div>
+      <h3>Things to do</h3>
+      <p class="line">${esc(d.todo)}</p>
+      <hr>
+      <h3>Traveler reviews</h3>
+      <p class="line">[Review placeholder] ${esc(d.review)}</p>
+    </div>
+    <aside class="glance">
+      <h3>Your trip at a glance</h3>
+      <p class="g-dates">${shortRange(p.start, p.end)} / ${plural(p.travelers, "traveler")}</p>
+      <p class="k">Estimated cost</p>
+      <p class="price">${money(m.cost.total)} per person</p>
+      <p class="g-note">Travel + stay + activities estimate${m.within ? "" : " | Over budget"}</p>
+      <hr>
+      <p class="k">Getting there</p><p class="g-v">${mode(p) === "car" ? "Drive" : "Train"} from NYC | about ${tv.t.replace("About ", "")}</p>
+      <p class="k">Weather</p><p class="g-v">Cool fall weather | check forecast near departure</p>
+      <p class="k">Accessibility</p><p class="g-v">${esc(d.accessShort)}</p>
+      <button class="btn btn-primary btn-left g-btn" data-choose="${d.id}">Choose This Trip</button>
+      <button class="btn btn-secondary btn-left g-btn2" data-addcmp="${d.id}">${inCmp ? "Remove from Compare" : "Add to Compare"}</button>
+    </aside>
+  </div></div>`;
+}
+
+/* ---------------- 05 Compare ---------------- */
+function vCompare() {
+  const p = S.prefs, ids = S.compare.slice(0, 2);
+  if (ids.length < 2) {
+    return `<div class="compare"><button class="crumb" data-go="results">&lt; Back to Recommendations</button><h1>Compare destinations</h1>${prefLine(p)}
+      <div class="cmp-empty">Select two destinations on the recommendations page to compare them.<button class="btn btn-primary" data-go="results">Choose destinations</button></div></div>`;
+  }
+  const cols = ids.map(id => ({ d: DESTS[id], ...matchInfo(DESTS[id], p) }));
+  const row = (label, cls, fn) => `<div class="c-row ${cls}"><div class="c-label">${label}</div>${cols.map(c => `<div class="c-cell">${fn(c)}</div>`).join("")}</div>`;
+  return `<div class="compare">
+  <button class="crumb" data-go="results">&lt; Back to Recommendations</button>
+  <h1>Compare destinations</h1>
+  ${prefLine(p)}
+  <div class="c-scroll"><div class="c-table">
+    ${row("", "c-head", c => `${ph("Destination photo", "c-img")}<h3>${c.d.name}, ${c.d.state}</h3><p class="c-sub">${esc(c.d.short)}</p>`)}
+    ${row("Estimated cost", "c-cost", c => `<p><strong>${money(c.cost.total)}</strong> &nbsp;/ person</p><p class="c-sub">Travel + stay + activities${c.within ? "" : " | Over budget"}</p>`)}
+    ${row("Travel time", "c-time", c => `<p>${c.d.travel[mode(p)].t}</p>`)}
+    ${row("Transportation", "c-trans", c => `<p>${esc(c.d.transLine)}</p><p>${esc(c.d.transLine2)}</p>`)}
+    ${row("Activities", "c-acts", c => c.d.acts.filter(a => a.kind !== "Transit" && a.kind !== "Food").slice(0, 3).map(a => `<p>[x] ${esc(a.name)}</p>`).join(""))}
+    ${row("", "c-actions", c => `<button class="btn btn-primary c-choose" data-choose="${c.d.id}">Choose This Trip</button><button class="btn btn-secondary c-remove" data-rmcmp="${c.d.id}">Remove</button>`)}
+  </div></div></div>`;
+}
+
+const sortedDay = day => [...day].sort((a, b) => toMin(a.t) - toMin(b.t));
+const wk = (t, i) => fmt(addDays(t.prefs.start, i), { weekday: "short" });
+
+/* ---------------- 06 Itinerary ---------------- */
+function vItin() {
+  const t = S.trip, d = DESTS[t.dest], p = t.prefs, c = costFor(d, p, t.days), day = t.days[S.day] || [];
+  const used = new Set(t.days.flat().map(x => x.a));
+  const avail = d.acts.filter(a => !used.has(a.id));
+  const items = day.map((it, idx) => ({ it, idx })).sort((a, b) => toMin(a.it.t) - toMin(b.it.t));
+  const fromTrips = !!t.fromTrips;
+  return `<div class="itin">
+  <button class="crumb" ${fromTrips ? 'data-go="trips"' : `data-dest="${d.id}"`}>&lt; ${fromTrips ? "Back to My Trips" : "Back to destination"}</button>
+  <h1>Build your ${d.name} itinerary</h1>
+  <p class="meta">${shortRange(p.start, p.end)} | ${plural(t.days.length, "day")} | ${plural(p.travelers, "traveler")}${t.status === "saved" ? (t.dirty ? " | Unsaved changes" : " | Saved") : t.status === "draft" ? " | Draft" : ""}</p>
+  <div class="itin-grid">
+    <div class="itin-main">
+      <div class="day-tabs" role="tablist">${t.days.map((_, i) => `<button class="dtab" role="tab" aria-selected="${i === S.day}" data-day="${i}">Day ${i + 1} · ${wk(t, i)}</button>`).join("")}</div>
+      <div class="sched">
+        ${items.length ? items.map(({ it, idx }) => { const a = act(d, it.a); return `
+        <div class="slot">
+          <span class="s-time">${clock(it.t)}</span>
+          <div class="s-body"><strong>${esc(a.name)}</strong><span>${esc(a.note)}</span></div>
+          <button class="btn btn-secondary s-btn" data-remove="${idx}">Remove activity</button>
+        </div>`; }).join("") : `<div class="slot slot-empty">No activities planned for this day.</div>`}
+      </div>
+      ${S.addOpen ? `<div class="adder">
+        <div class="adder-head"><strong>Add an activity to Day ${S.day + 1}</strong><button class="btn btn-secondary s-btn" data-toggle-add>Close</button></div>
+        ${avail.length ? avail.map(a => `<div class="adder-item"><div><strong>${esc(a.name)}</strong><span>${a.kind} | ${dur(a.mins)} | ${a.cost ? money(a.cost) : "Free"}</span></div><button class="btn btn-primary s-btn" data-add="${a.id}">Add</button></div>`).join("") : `<p>All activities are already in your plan.</p>`}
+      </div>` : `<button class="add-act" data-toggle-add>+ Add Activity</button>`}
+    </div>
+    <aside class="tsum">
+      <h3>Trip summary</h3>
+      <p class="t-sub">${d.name}, ${d.state} | ${shortRange(p.start, p.end)} | ${plural(p.travelers, "traveler")}</p>
+      <hr>
+      <div class="t-rows">
+        <p><span>Transportation</span><span>${money(c.transport)}</span></p>
+        <p><span>Stay (${plural(t.days.length - 1, "night")})</span><span>${money(c.stay)}</span></p>
+        <p><span>Food</span><span>${money(c.food)}</span></p>
+        <p><span>Activities</span><span>${money(c.acts)}</span></p>
+      </div>
+      <hr>
+      <p class="t-k">Estimated cost</p>
+      <p class="price">${money(c.total)} per person</p>
+      <p class="t-v">${c.total > p.budget ? `${money(c.total - p.budget)} over your ${money(p.budget)} budget` : `Within your ${money(p.budget)} budget`}</p>
+      <hr>
+      <p class="t-k2">Activities planned</p>
+      <p class="t-v">${t.days.map((dd, i) => `Day ${i + 1}: ${dd.length}`).join(" | ")}</p>
+      <button class="btn btn-secondary t-btn" data-go="route">View Route</button>
+      <button class="btn btn-primary t-btn t-save" data-save>Save Trip</button>
+    </aside>
+  </div></div>`;
+}
+
+function hav(a, b) { const R = 6371, r = x => x * Math.PI / 180, dl = r(b.lat - a.lat), dn = r(b.lng - a.lng); const h = Math.sin(dl / 2) ** 2 + Math.cos(r(a.lat)) * Math.cos(r(b.lat)) * Math.sin(dn / 2) ** 2; return 2 * R * Math.asin(Math.sqrt(h)); }
+function leg(a, b, p) {
+  const km = hav(a, b) * 1.25;
+  if (km < 0.05) return { km, mins: 0, how: "Same location" };
+  if (km < 1.6) return { km, mins: Math.max(2, Math.round(km / 4.8 * 60)), how: "Walk" };
+  return { km, mins: Math.round(km / 35 * 60) + 5, how: p.transport === "car" ? "Drive" : "Taxi" };
+}
+
+// Map: wireframe gray box with an X; black numbered dots plotted from real coordinates
+function routeMap(stops) {
+  const W = 880, H = 680, pad = 90, z = S.zoom;
+  const lat0 = stops.reduce((s, x) => s + x.lat, 0) / stops.length, k = Math.cos(lat0 * Math.PI / 180);
+  const xs = stops.map(s => s.lng * k), ys = stops.map(s => s.lat);
+  const minX = Math.min(...xs), maxX = Math.max(...xs), minY = Math.min(...ys), maxY = Math.max(...ys);
+  const sc = Math.min((W - 2 * pad) / Math.max(maxX - minX, .006), (H - 2 * pad) / Math.max(maxY - minY, .006)) * z;
+  const cx = (minX + maxX) / 2, cy = (minY + maxY) / 2, seen = {};
+  const pts = stops.map(s => { const key = s.lat + "," + s.lng, n = seen[key] = (seen[key] || 0) + 1; return { x: W / 2 + (s.lng * k - cx) * sc + (n - 1) * 22, y: H / 2 - (s.lat - cy) * sc - (n - 1) * 10 }; });
+  const path = pts.map((p, i) => (i ? "L" : "M") + p.x.toFixed(1) + " " + p.y.toFixed(1)).join(" ");
+  return `<svg class="map-svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Route map with ${stops.length} stops">
+    <line x1="0" y1="0" x2="${W}" y2="${H}" stroke="#dedede"/><line x1="${W}" y1="0" x2="0" y2="${H}" stroke="#dedede"/>
+    <path d="${path}" fill="none" stroke="#8a8a8a" stroke-width="1.2"/>
+    ${pts.map((p, i) => `<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="14" fill="#1f1f1f"/><text x="${p.x.toFixed(1)}" y="${(p.y + 4.5).toFixed(1)}" text-anchor="middle" font-size="12" font-weight="700" fill="#fff" font-family="Inter, Arial, sans-serif">${i + 1}</text>`).join("")}
+  </svg>`;
+}
+
+/* ---------------- 07 Route ---------------- */
+function vRoute() {
+  const t = S.trip, d = DESTS[t.dest], p = t.prefs, day = sortedDay(t.days[S.day] || []);
+  const stops = day.map(it => ({ ...act(d, it.a), t: it.t }));
+  let travel = 0;
+  const legs = stops.slice(1).map((s, i) => { const l = leg(stops[i], s, p); travel += l.mins; return l; });
+  return `<div class="route">
+  <div class="route-head">
+    <div><h1>Route for Day ${S.day + 1}</h1>
+      <p class="meta">${d.name}, ${d.state} | ${fmt(addDays(p.start, S.day), { weekday: "short", month: "short", day: "numeric" })} | ${plural(stops.length, "stop")} | ${travel} min travel</p></div>
+    <div class="route-tabs" role="tablist">${t.days.map((_, i) => `<button class="dtab" role="tab" aria-selected="${i === S.day}" data-day="${i}">Day ${i + 1}</button>`).join("")}</div>
+  </div>
+  <div class="route-grid">
+    <div class="route-left">
+      <div class="stops">${stops.length ? stops.map((s, i) => `
+        ${i ? `<div class="leg">${legs[i - 1].how}${legs[i - 1].mins ? ` · ${legs[i - 1].mins} min · ${legs[i - 1].km.toFixed(1)} km` : ""}</div>` : ""}
+        <div class="stop"><span class="num">${i + 1}</span><div><strong>${esc(s.name)}</strong><span>${clock(s.t)} · ${dur(s.mins)}</span></div></div>`).join("")
+        : `<div class="stop"><div><strong>No stops planned</strong><span>Add activities in the itinerary.</span></div></div>`}</div>
+      <div class="route-btns"><button class="btn btn-secondary" data-go="itinerary">&lt; Back to Itinerary</button><button class="btn btn-primary" data-save>Save Trip</button></div>
+    </div>
+    <div class="map">
+      ${stops.length ? routeMap(stops) : `<svg class="map-svg" viewBox="0 0 880 680" preserveAspectRatio="none"><line x1="0" y1="0" x2="880" y2="680" stroke="#dedede"/><line x1="880" y1="0" x2="0" y2="680" stroke="#dedede"/></svg>`}
+      <span class="map-tag">Map placeholder</span>
+      ${stops.length > 1 ? `<div class="map-legend"><strong>Next: ${esc(stops[1].name)}</strong><span>${legs[0].how} ${legs[0].mins} min | ${travel} min travel today</span></div>` : ""}
+      <div class="zoom"><button data-zoom="1" aria-label="Zoom in">+</button><button data-zoom="-1" aria-label="Zoom out">−</button></div>
+    </div>
+  </div></div>`;
+}
+
+/* ---------------- 08 My Trips ---------------- */
+function tripBucket(t) { return t.prefs.end < iso(new Date()) ? "past" : "upcoming"; }
+function inTab(t, tab) {
+  if (tab === "drafts") return t.status === "draft";
+  return tripBucket(t) === tab;
+}
+function vTrips() {
+  const tabs = [["upcoming", "Upcoming"], ["drafts", "Drafts"], ["past", "Past"]];
+  const list = S.trips.filter(t => inTab(t, S.tripsTab));
+  const count = k => S.trips.filter(t => inTab(t, k)).length;
+  return `<div class="trips">
+  <div class="trips-head"><div><h1>My Trips</h1><p class="sub">${plural(S.trips.length, "saved trip")}</p></div><button class="btn btn-primary new-trip" data-newtrip>+ Plan a New Trip</button></div>
+  <div class="trip-tabs" role="tablist">${tabs.map(([k, l]) => `<button role="tab" aria-selected="${S.tripsTab === k}" data-ttab="${k}">${l} (${count(k)})</button>`).join("")}</div>
+  ${list.length ? `<div class="trip-cards">${list.map(t => { const d = DESTS[t.dest], c = costFor(d, t.prefs, t.days), n = t.days.flat().length; return `
+    <article class="trip ${t.status === "draft" ? "draft" : ""}">
+      ${ph("Image placeholder", "trip-img")}
+      <div class="trip-top"><h3>${d.name}, ${d.state}</h3><span class="badge">${t.status === "draft" ? "Draft" : tripBucket(t) === "past" ? "Past" : "Upcoming"}</span></div>
+      <p>${shortRange(t.prefs.start, t.prefs.end)} | ${plural(t.prefs.travelers, "traveler")}</p>
+      <p>Estimated budget: <strong>${money(c.total)}/person</strong></p>
+      <p>${n} ${n === 1 ? "activity" : "activities"} planned</p>
+      <div class="trip-btns"><button class="btn btn-primary" data-open="${t.id}">Open Trip</button><button class="btn btn-secondary" data-open="${t.id}">Edit Trip</button></div>
+    </article>`; }).join("")}</div>`
+  : `<p class="trips-empty">${S.tripsTab === "drafts" ? "No drafts. Trips you edit without saving appear here." : S.tripsTab === "past" ? "No past trips yet." : "No upcoming trips."}</p>`}
+  </div>`;
+}
+
+function render() {
+  const v = { home: vHome, plan: vPlan, results: vResults, destination: vDest, compare: vCompare, itinerary: vItin, route: vRoute, trips: vTrips }[S.view];
+  $("#app").innerHTML = v();
+  // Frames 05–08 in the wireframe use a shorter header and wider margins
+  document.body.classList.toggle("frame-b", ["compare", "itinerary", "route", "trips"].includes(S.view));
+  const navKey = { home: "home", destination: "home", trips: "trips" }[S.view] || "plan";
+  document.querySelectorAll("[data-nav]").forEach(b => { if (b.dataset.nav === navKey) b.setAttribute("aria-current", "page"); else b.removeAttribute("aria-current"); });
+}
+
+/* ---------------- state ---------------- */
+const STORE="tp-trips-v3";
+function seedTrips(){
+  const mk=(id,dest,start,end,status)=>{const d=DESTS[dest];const prefs={from:"New York City",start,end,budget:500,travelers:2,interests:["art","nature"],transport:"train",needs:[]};return {id,dest,prefs,days:defaultPlan(d,dayCount(prefs)),status,sample:true,savedAt:Date.now()}};
+  return [mk("sample-hudson","hudson","2026-11-13","2026-11-15","saved"),mk("sample-cs","coldspring","2026-11-20","2026-11-22","saved"),mk("sample-beacon","beacon","2026-12-04","2026-12-06","draft")];
+}
+function loadTrips(){try{const v=JSON.parse(localStorage.getItem(STORE));if(Array.isArray(v))return v}catch(e){}return seedTrips()}
+function persist(){try{localStorage.setItem(STORE,JSON.stringify(S.trips))}catch(e){}}
+
+const S={
+  view:"home",
+  prefs:{from:"New York City",start:"2026-10-30",end:"2026-11-01",budget:500,travelers:2,interests:["art","food"],transport:"train",needs:[]},
+  sort:"match",zoom:1,compare:[],destId:"hudson",trip:null,day:0,addOpen:false,
+  trips:loadTrips(),tripsTab:"upcoming",errors:{}
+};
+const VIEWS=["home","plan","results","destination","compare","itinerary","route","trips"];
+
+function go(view,opts={}){
+  Object.assign(S,opts);
+  if((view==="itinerary"||view==="route")&&!S.trip) startTrip(S.destId,false);
+  S.view=view;S.addOpen=false;S.zoom=1;
+  try{history.replaceState(null,"","#"+view)}catch(e){}
+  render();window.scrollTo(0,0);
+}
+function startTrip(destId,nav=true){
+  const d=DESTS[destId];
+  S.trip={id:"t"+Date.now(),dest:destId,prefs:clone(S.prefs),days:defaultPlan(d,dayCount(S.prefs)),status:"new"};
+  S.day=0; if(nav) go("itinerary");
+}
+function upsert(rec){const i=S.trips.findIndex(t=>t.id===rec.id);if(i>=0)S.trips[i]=rec;else S.trips.unshift(rec);persist()}
+function touch(){
+  const t=S.trip;
+  if(t.status==="saved"){t.dirty=true}
+  else{t.status="draft";upsert(clone(t))}
+}
+function saveTrip(){
+  const t=S.trip;t.status="saved";t.dirty=false;t.savedAt=Date.now();delete t.sample;
+  upsert(clone(t));render();
+  toast("Trip saved!",{label:"View My Trips",go:"trips"});
+}
+
+let toastTimer;
+function toast(msg,action){
+  clearTimeout(toastTimer);
+  const slot=$("#toast-slot");
+  slot.innerHTML=`<div class="toast"><span>${esc(msg)}</span>${action?`<button class="btn btn-sm" data-go="${action.go}" data-toast-close>${esc(action.label)}</button>`:""}<button class="x" data-toast-close aria-label="Dismiss">×</button></div>`;
+  toastTimer=setTimeout(()=>slot.innerHTML="",7000);
+}
+
+
+/* ---------------- events ---------------- */
+document.addEventListener("click",e=>{
+  const el=e.target.closest("button,[data-cmp]");if(!el)return;
+  const ds=el.dataset;
+  if("toastClose" in ds) $("#toast-slot").innerHTML="";
+  if(ds.go){go(ds.go);return}
+  if(ds.dest){go("destination",{destId:ds.dest});return}
+  if(ds.detail){go("destination",{destId:ds.detail});return}
+  if(ds.choose){startTrip(ds.choose);return}
+  if(ds.addcmp){
+    const id=ds.addcmp;
+    if(S.compare.includes(id)){S.compare=S.compare.filter(x=>x!==id);render();toast(`${DESTS[id].name} removed from compare.`);return}
+    if(S.compare.length>=2)S.compare.shift();
+    S.compare.push(id);
+    if(S.compare.length>=2){go("compare");return}
+    render();toast(`${DESTS[id].name} added. Pick one more destination to compare.`,{label:"Back to recommendations",go:"results"});return;
+  }
+  if(ds.cmptoggle){const id=ds.cmptoggle;if(S.compare.includes(id))S.compare=S.compare.filter(x=>x!==id);else{if(S.compare.length>=2)S.compare.shift();S.compare.push(id)}render();return}
+  if(ds.rmcmp){S.compare=S.compare.filter(x=>x!==ds.rmcmp);render();return}
+  if("clearCmp" in ds){S.compare=[];render();return}
+  if(ds.zoom){S.zoom=Math.min(3,Math.max(.6,S.zoom*(ds.zoom>0?1.3:1/1.3)));render();return}
+  if(ds.day!==undefined){S.day=+ds.day;S.addOpen=false;S.zoom=1;render();return}
+  if("toggleAdd" in ds){S.addOpen=!S.addOpen;render();return}
+  if(ds.add){
+    const d=DESTS[S.trip.dest],a=act(d,ds.add),day=S.trip.days[S.day];
+    let t="10:00";
+    if(day.length){const last=sortedDay(day).filter(x=>act(d,x.a).kind!=="Transit"||day.length===1).pop()||sortedDay(day).pop();const end=toMin(last.t)+act(d,last.a).mins+30;t=toT(Math.min(end,22*60))}
+    day.push({t,a:a.id});touch();render();toast(`${a.name} added at ${clock(t)}. Adjust the time if needed.`);return;
+  }
+  if(ds.remove!==undefined){S.trip.days[S.day].splice(+ds.remove,1);touch();render();return}
+  if("save" in ds){saveTrip();return}
+  if(ds.ttab){S.tripsTab=ds.ttab;render();return}
+  if(ds.open){const r=S.trips.find(t=>t.id===ds.open);if(r){S.trip=clone(r);S.trip.fromTrips=true;S.day=0;S.prefs=clone(r.prefs);go("itinerary")}return}
+  if("newtrip" in ds){S.trip=null;S.compare=[];go("plan");return}
+});
+document.addEventListener("change",e=>{
+  const el=e.target;
+  if(el.dataset.cmp){
+    const id=el.dataset.cmp;
+    if(el.checked){if(S.compare.length>=3){el.checked=false;toast("You can compare up to three destinations.");return}S.compare.push(id)}
+    else S.compare=S.compare.filter(x=>x!==id);
+    render();return;
+  }
+  if(el.id==="sort"){S.sort=el.value;render();return}
+  if(el.dataset.time!==undefined&&el.value){S.trip.days[S.day][+el.dataset.time].t=el.value;touch();render();return}
+  if(el.id==="f-start"||el.id==="f-end"){
+    const s=$("#f-start").value,en=$("#f-end").value,h=$("#f-days");
+    if(h&&s&&en){const n=Math.round((pd(en)-pd(s))/864e5)+1;h.textContent=n>0?`| ${plural(n,"day")}`:"| check dates"}
+  }
+});
+document.addEventListener("submit",e=>{
+  if(e.target.id!=="plan-form")return;
+  e.preventDefault();
+  const f=e.target,start=$("#f-start").value,end=$("#f-end").value,budget=+$("#f-budget").value;
+  const errors={};
+  if(!start||!end) errors.dates="Choose a start and end date.";
+  else{const n=Math.round((pd(end)-pd(start))/864e5)+1;if(n<2||n>4) errors.dates="Weekend trips need to be 2 to 4 days. Adjust your dates.";}
+  if(!budget||budget<100) errors.budget="Enter a budget of at least $100 per person.";
+  S.prefs={from:$("#f-from").value.trim()||"New York City",start:start||S.prefs.start,end:end||S.prefs.end,budget:budget||S.prefs.budget,travelers:+$("#f-trav").value,
+    interests:[...f.querySelectorAll("input[name=interest]:checked")].map(i=>i.value),
+    transport:(f.querySelector("input[name=transport]:checked")||{}).value||"train",
+    needs:[...f.querySelectorAll("input[name=need]:checked")].map(i=>i.value)};
+  S.errors=errors;
+  if(Object.keys(errors).length){render();return}
+  S.trip=null;go("results");
+});
+
+/* ---------------- boot ---------------- */
+(function boot(){
+  const h=(location.hash||"").slice(1);
+  if(VIEWS.includes(h)){ if(h==="compare"&&S.compare.length<2) S.compare=["hudson","beacon"]; go(h); }
+  else render();
+})();
+
+/* ---------------- scale to the 1440px wireframe ----------------
+   The design is drawn on a 1440px-wide frame. On desktop screens the whole
+   page is scaled so it looks the same at any window width. */
+function fitToFrame(){
+  const w=document.documentElement.clientWidth;
+  document.body.style.zoom = w>=1024 ? String(w/1440) : "";
+}
+window.addEventListener("resize",fitToFrame);
+fitToFrame();
+
+</script>
 </body>
 </html>
