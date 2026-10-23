@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Travel Planner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="top">
+  <div class="wrap bar">
+    <button class="brand" data-go="home" aria-label="Travel Planner home">
+      Travel Planner
+    </button>
+    <nav class="nav" aria-label="Main">
+      <button data-go="home" data-nav="home">Discover</button>
+      <button data-go="plan" data-nav="plan">Plan a Trip</button>
+      <button data-go="trips" data-nav="trips">My Trips</button>
+    </nav>
+  </div>
+</header>
+<main class="wrap" id="app"></main>
+<div id="toast-slot" role="status" aria-live="polite"></div>
+<script src="script.js"></script>
+</body>
+</html>
