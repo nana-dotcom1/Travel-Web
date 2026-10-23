@@ -1,6 +1,6 @@
 /* ---------------- data ---------------- */
 const DESTS = {
-  hudson:{id:"hudson",name:"Hudson",state:"NY",tagline:"Art, cafés, and a quiet river-town weekend.",
+  hudson:{id:"hudson",short:"Arts, cafes, and a quiet weekend",sub:"A weekend of art, local food, and river views.",todo:"Explore galleries | Walk by the river | Visit local cafes",review:"A relaxed weekend with easy train access.",accessShort:"Flat, walkable center | some sites have stairs",transLine:"Train from Moynihan Train Hall (Amtrak)",transLine2:"Walkable from Hudson station",name:"Hudson",state:"NY",tagline:"Art, cafés, and a quiet river-town weekend.",
     blurb:"A weekend of galleries, local food, and river views at the north end of the Hudson Valley.",
     tags:["art","food","shopping"],room:180,
     travel:{train:{t:"About 2 hr",mins:120,how:"Amtrak Empire Service from Moynihan Train Hall to Hudson",cost:74},
@@ -30,7 +30,7 @@ const DESTS = {
     reviews:[["Spent most of Saturday on Warren Street and still didn't see every gallery. Olana at sunset was the highlight.","Weekend in October"],
              ["Easy by train. We never needed a car except for the Thomas Cole site.","Couple, no car"]]
   },
-  beacon:{id:"beacon",name:"Beacon",state:"NY",tagline:"Big art, a steep hike, and a walkable Main Street.",
+  beacon:{id:"beacon",short:"Art, walking, and local food",sub:"A weekend of big art, a ridge hike, and a walkable Main Street.",todo:"Visit Dia Beacon | Hike Mount Beacon | Browse Main Street",review:"Dia took a whole afternoon and it was worth it.",accessShort:"Dia is step-free | Main Street has gentle hills",transLine:"Train from Grand Central (Metro-North)",transLine2:"Free loop bus to Main Street",name:"Beacon",state:"NY",tagline:"Big art, a steep hike, and a walkable Main Street.",
     blurb:"A short train ride to Dia Beacon, Mount Beacon's fire tower, and a mile of shops and cafés.",
     tags:["art","nature","food"],room:170,
     travel:{train:{t:"About 1 hr 30 min",mins:90,how:"Metro-North Hudson Line from Grand Central to Beacon",cost:33},
@@ -59,7 +59,7 @@ const DESTS = {
     reviews:[["Dia took longer than we planned, in a good way. Leave a full afternoon.","First visit"],
              ["The Mount Beacon stairs are no joke, but the view from the fire tower is worth it.","Hiking weekend"]]
   },
-  coldspring:{id:"coldspring",name:"Cold Spring",state:"NY",tagline:"Trails, river views, and an easy Main Street.",
+  coldspring:{id:"coldspring",short:"River views and easy walks",sub:"A weekend of trails, antique shops, and river views.",todo:"Hike the Highlands | Browse antique shops | Relax on the riverfront",review:"Everything is a few minutes from the train.",accessShort:"Short Main Street | trails are steep",transLine:"Train from Grand Central (Metro-North)",transLine2:"Main Street starts at the station",name:"Cold Spring",state:"NY",tagline:"Trails, river views, and an easy Main Street.",
     blurb:"A small village under the Hudson Highlands with antique shops, ridge hikes, and a riverfront bandstand.",
     tags:["nature","shopping","art"],room:175,
     travel:{train:{t:"About 1 hr 20 min",mins:80,how:"Metro-North Hudson Line from Grand Central to Cold Spring",cost:30},
@@ -94,6 +94,7 @@ const INTERESTS=[["art","Art & culture"],["food","Local food"],["nature","Nature
 const KIND_INTEREST={Art:"art",History:"art",Food:"food",Nature:"nature",Shopping:"shopping"};
 const TRANSPORT={car:"Car",train:"No car / Public transit",any:"Flexible"};
 const TRANSPORT_SHORT={car:"Car",train:"No car",any:"Flexible"};
+const TRANSPORT_SHORT_SIDE={car:"Car",train:"Public transit",any:"Flexible"};
 
 /* ---------------- helpers ---------------- */
 const $=s=>document.querySelector(s);
@@ -137,68 +138,70 @@ function matchInfo(d,prefs){
   return {hits,cost:c,within,score};
 }
 
-/* ---------------- placeholders ---------------- */
-// Gray wireframe image box with an X and a centered label
+/* ---------------- wireframe pieces ---------------- */
+// Gray image box with an X through it and a centered label
 function ph(label, cls = "") {
   return `<div class="ph ${cls}" role="img" aria-label="${esc(label)}">
     <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg>
     <span>${esc(label)}</span></div>`;
 }
 const interestLabel = id => INTERESTS.find(i => i[0] === id)[1];
+const shortRange = (a, b) => { const A = pd(a), B = pd(b); return A.getMonth() === B.getMonth() ? `${fmt(a)}–${B.getDate()}` : `${fmt(a)}–${fmt(b)}`; };
+const box = on => on ? "[x]" : "[ ]";
 
-/* ---------------- views ---------------- */
-
-// 01 Home
+/* ---------------- 01 Home ---------------- */
 function vHome() {
-  return `<div class="page">
-  <section class="hero">
-    <div class="hero-copy">
+  return `<div class="home">
+  <section class="home-hero">
+    <div class="home-copy">
       <h1>A long weekend. A trip that fits you.</h1>
-      <p>Plan a short getaway around your time, budget, and how you travel.</p>
-      <div><button class="btn btn-primary" data-go="plan">Plan Trip</button></div>
-      <p class="small muted">No car? Explore trips by train or bus.</p>
+      <p class="lead">Find a short getaway based on your time, budget, and how you travel.</p>
+      <button class="btn btn-primary btn-left home-cta" data-go="plan">Plan a Trip</button>
+      <p class="note">No car? Explore trips by train or bus.</p>
     </div>
-    ${ph("Destination image", "hero-img")}
+    ${ph("Destination image", "home-img")}
   </section>
-  <section class="stack">
-    <div><h2>Explore weekend ideas</h2><p class="muted">Start with an idea, or enter your preferences for matching trips.</p></div>
+  <section class="home-ideas">
+    <h2>Explore weekend ideas</h2>
+    <p class="sub">Start with an idea, or enter your preferences for matching trips.</p>
     <div class="ideas">${ORDER.map(id => { const d = DESTS[id]; return `
-      <article class="card idea">
+      <article class="idea">
         ${ph("Image placeholder", "idea-img")}
         <h3>${d.name}</h3>
-        <p class="muted">${esc(d.tagline)}</p>
-        <button class="text-btn" data-dest="${id}">Explore destination</button>
+        <p>${esc(d.short)}</p>
+        <button class="text-link" data-dest="${id}">Explore destination</button>
       </article>`; }).join("")}</div>
   </section></div>`;
 }
 
-// 02 Preferences form
+/* ---------------- 02 Preferences ---------------- */
 function vPlan() {
   const p = S.prefs, e = S.errors;
-  return `<div class="page narrow">
-  <div><h1>Tell us about your trip</h1><p class="muted">We will use your choices to find suitable destinations.</p></div>
-  <form class="panel form" id="plan-form" novalidate>
-    <div class="field"><label for="f-from">Starting location</label><input class="input" id="f-from" value="${esc(p.from)}"></div>
-    <div class="field"><label for="f-start">Travel dates</label>
-      <div class="dates"><input class="input" type="date" id="f-start" value="${p.start}" aria-label="Start date"><span class="muted">–</span><input class="input" type="date" id="f-end" value="${p.end}" aria-label="End date"></div>
-      ${e.dates ? `<span class="error">${e.dates}</span>` : `<span class="hint" id="f-days">${plural(dayCount(p), "day")}</span>`}</div>
-    <div class="field"><label for="f-budget">Budget per person</label><div class="prefix"><span>Up to $</span><input class="input" type="number" min="100" step="10" id="f-budget" value="${p.budget}"></div>${e.budget ? `<span class="error">${e.budget}</span>` : ""}</div>
-    <div class="field"><label for="f-trav">Number of travelers</label><select class="input" id="f-trav">${[1,2,3,4,5,6].map(n => `<option value="${n}" ${n == p.travelers ? "selected" : ""}>${plural(n, "adult")}</option>`).join("")}</select></div>
-    <fieldset class="field full"><legend>Interests</legend>
-      <div class="boxes">${INTERESTS.map(([v, l]) => `<label class="box"><input type="checkbox" name="interest" value="${v}" ${p.interests.includes(v) ? "checked" : ""}><span>${l}</span></label>`).join("")}</div></fieldset>
-    <fieldset class="field full"><legend>Transportation</legend>
-      <div class="radio-row">${Object.entries(TRANSPORT).map(([v, l]) => `<label class="check"><input type="radio" name="transport" value="${v}" ${p.transport === v ? "checked" : ""}>${l}</label>`).join("")}</div></fieldset>
-    <fieldset class="field full"><legend>Additional needs (optional)</legend>
-      <div class="check-row">${[["access", "Step-free access"], ["pet", "Traveling with a pet"]].map(([v, l]) => `<label class="check"><input type="checkbox" name="need" value="${v}" ${p.needs.includes(v) ? "checked" : ""}>${l}</label>`).join("")}</div></fieldset>
-    <div class="form-actions"><button type="button" class="btn btn-secondary" data-go="home">&lt; Back</button><button type="submit" class="btn btn-primary btn-wide">Find Trips</button></div>
+  return `<div class="plan">
+  <h1>Tell us about your trip</h1>
+  <p class="sub">We will use your choices to find suitable destinations.</p>
+  <form class="plan-form" id="plan-form" novalidate>
+    <div class="f-grid">
+      <div class="f"><label for="f-from">Starting location</label><input class="fi" id="f-from" value="${esc(p.from)}"></div>
+      <div class="f"><label for="f-start">Travel dates</label>
+        <div class="fi fi-dates"><input type="date" id="f-start" value="${p.start}" aria-label="Start date"><span>–</span><input type="date" id="f-end" value="${p.end}" aria-label="End date"><span id="f-days">| ${plural(dayCount(p), "day")}</span></div>
+        ${e.dates ? `<span class="err">${e.dates}</span>` : ""}</div>
+      <div class="f"><label for="f-budget">Budget per person</label><div class="fi fi-budget"><span>Up to $</span><input type="number" min="100" step="10" id="f-budget" value="${p.budget}"></div>${e.budget ? `<span class="err">${e.budget}</span>` : ""}</div>
+      <div class="f"><label for="f-trav">Number of travelers</label><select class="fi" id="f-trav">${[1,2,3,4,5,6].map(n => `<option value="${n}" ${n == p.travelers ? "selected" : ""}>${plural(n, "adult")}</option>`).join("")}</select></div>
+    </div>
+    <fieldset class="f"><legend>Interests</legend>
+      <div class="interest-row">${INTERESTS.map(([v, l]) => `<label class="ibox"><input type="checkbox" name="interest" value="${v}" ${p.interests.includes(v) ? "checked" : ""}><span><b class="on">[x]</b><b class="off">[ ]</b> ${l}</span></label>`).join("")}</div></fieldset>
+    <fieldset class="f"><legend>Transportation</legend>
+      <div class="fi fi-radios">${Object.entries(TRANSPORT).map(([v, l]) => `<label class="tx"><input type="radio" name="transport" value="${v}" ${p.transport === v ? "checked" : ""}><span><b class="on">(x)</b><b class="off">( )</b> ${l}</span></label>`).join("")}</div></fieldset>
+    <fieldset class="f"><legend>Additional needs (optional)</legend>
+      <div class="needs">${[["access", "Step-free access"], ["pet", "Traveling with a pet"]].map(([v, l]) => `<label class="tx"><input type="checkbox" name="need" value="${v}" ${p.needs.includes(v) ? "checked" : ""}><span><b class="on">[x]</b><b class="off">[ ]</b> ${l}</span></label>`).join("")}</div></fieldset>
+    <div class="plan-actions"><button type="button" class="btn btn-secondary btn-left plan-back" data-go="home">&lt; Back</button><button type="submit" class="btn btn-primary btn-left plan-find">Find Trips</button></div>
   </form></div>`;
 }
 
-function prefLine(p) {
-  return `<p class="meta-line">NYC | ${range(p.start, p.end)} | ${plural(p.travelers, "traveler")} | Up to ${money(p.budget)}/person | ${TRANSPORT_SHORT[p.transport]}</p>`;
-}
+const prefLine = p => `<p class="meta">NYC | ${shortRange(p.start, p.end)} | ${plural(p.travelers, "traveler")} | Up to ${money(p.budget)}/person | ${TRANSPORT_SHORT[p.transport]}</p>`;
 
-// 03 Recommendations
+/* ---------------- 03 Recommendations ---------------- */
 function vResults() {
   const p = S.prefs;
   let list = ORDER.map(id => ({ d: DESTS[id], ...matchInfo(DESTS[id], p) }));
@@ -206,141 +209,146 @@ function vResults() {
   if (S.sort === "cost") list.sort((a, b) => a.cost.total - b.cost.total);
   if (S.sort === "time") list.sort((a, b) => a.d.travel[mode(p)].mins - b.d.travel[mode(p)].mins);
   const n = S.compare.length;
-  return `<div class="page">
-  <div><h1>Trips that fit your weekend</h1>${prefLine(p)}</div>
-  <div class="split">
-    <aside class="panel prefs">
+  return `<div class="results">
+  <h1>Trips that fit your weekend</h1>
+  ${prefLine(p)}
+  <div class="res-grid">
+    <aside class="prefs">
       <h3>Your preferences</h3>
-      <div class="pref"><strong>Budget / person</strong><span>Up to ${money(p.budget)}</span></div>
+      <p class="k">Budget / person</p><p class="v">Up to ${money(p.budget)}</p>
       <hr>
-      <div class="pref"><strong>Transportation</strong><span>[x] ${TRANSPORT[p.transport]}</span></div>
-      <div class="pref"><strong>Interests</strong>${p.interests.length ? p.interests.map(i => `<span>[x] ${interestLabel(i)}</span>`).join("") : `<span>Open to anything</span>`}</div>
-      <button class="btn btn-secondary btn-sm" data-go="plan">Edit Preferences</button>
-      <div class="pref"><strong>No suitable results?</strong><span class="muted">Try changing dates or your budget.</span></div>
+      <p class="k">Transportation</p><p class="v">[x] ${TRANSPORT_SHORT_SIDE[p.transport]}</p>
+      <p class="k">Interests</p>${p.interests.length ? p.interests.map(i => `<p class="v">[x] ${interestLabel(i)}</p>`).join("") : `<p class="v">[ ] None selected</p>`}
+      <button class="btn btn-secondary btn-left edit-prefs" data-go="plan">Edit Preferences</button>
+      <p class="k">No suitable results?</p><p class="v muted">Try changing dates<br>or your budget.</p>
     </aside>
-    <section class="stack tight">
-      <div class="list-head"><strong>${list.length} matching destinations</strong>
-        <label class="sort">Sort: <select id="sort"><option value="match" ${S.sort === "match" ? "selected" : ""}>Best match</option><option value="cost" ${S.sort === "cost" ? "selected" : ""}>Lowest cost</option><option value="time" ${S.sort === "time" ? "selected" : ""}>Shortest travel</option></select></label></div>
+    <section class="res-main">
+      <div class="res-head"><strong>${list.length} matching destinations</strong>
+        <label class="sort">Sort: <select id="sort" aria-label="Sort"><option value="match" ${S.sort === "match" ? "selected" : ""}>Best match</option><option value="cost" ${S.sort === "cost" ? "selected" : ""}>Lowest cost</option><option value="time" ${S.sort === "time" ? "selected" : ""}>Shortest travel</option></select></label></div>
       ${list.map(x => { const d = x.d, sel = S.compare.includes(d.id), tv = d.travel[mode(p)]; return `
-      <article class="card result">
-        ${ph("Photo", "result-img")}
-        <div class="result-body">
+      <article class="res-card">
+        ${ph("Photo", "res-img")}
+        <div class="res-body">
           <h3>${d.name}</h3>
-          <p>${money(x.cost.total)}/person estimated | ${tv.t}${x.within ? "" : ` | <span class="over">Over budget</span>`}</p>
-          <p class="muted">Reachable by ${mode(p)} | ${x.hits.length ? x.hits.map(interestLabel).join(", ") : "Weekend activities"}</p>
-          <label class="check small"><input type="checkbox" data-cmp="${d.id}" ${sel ? "checked" : ""}>Compare</label>
+          <p>${money(x.cost.total)}/person estimated | ${tv.t}${x.within ? "" : " | Over budget"}</p>
+          <p>Reachable by ${mode(p)} | Weekend activities</p>
+          <button class="tick" data-cmptoggle="${d.id}" aria-pressed="${sel}">${box(sel)} Compare</button>
         </div>
-        <button class="btn btn-secondary btn-sm" data-detail="${d.id}">View Details</button>
+        <button class="btn btn-secondary res-btn" data-detail="${d.id}">View Details</button>
       </article>`; }).join("")}
-      <div class="compare-strip">
-        <span>${n ? `${n} selected: ${S.compare.map(id => DESTS[id].name).join(" + ")}${n < 2 ? " (select one more)" : ""}` : "Select two destinations to compare"}</span>
-        <button class="btn btn-secondary btn-sm" data-go="compare" ${n < 2 ? "disabled" : ""}>Compare (${n})</button>
+      <div class="cmp-strip">
+        <span>${n ? `${n} selected: ${S.compare.map(id => DESTS[id].name).join(" + ")}` : "0 selected: choose two to compare"}</span>
+        <button class="strip-btn" data-go="compare" ${n < 2 ? "disabled" : ""}>Compare (${n})</button>
       </div>
     </section>
   </div></div>`;
 }
 
-// 04 Destination details
+/* ---------------- 04 Destination ---------------- */
 function vDest() {
   const d = DESTS[S.destId], p = S.prefs, m = matchInfo(d, p), tv = d.travel[mode(p)], inCmp = S.compare.includes(d.id);
-  const things = d.acts.filter(a => a.kind !== "Transit").slice(0, 6);
-  return `<div class="page">
-  <div><button class="back" data-go="results">&lt; Back to Recommendations</button>
-    <h1>${d.name}, New York</h1><p class="muted">${esc(d.blurb)}</p></div>
+  return `<div class="dest">
+  <button class="crumb" data-go="results">&lt; Back to Recommendations</button>
+  <h1>${d.name}, New York</h1>
+  <p class="sub">${esc(d.sub)}</p>
   <div class="dest-grid">
-    <div class="stack">
-      ${ph("Main destination photo", "main-img")}
-      <div class="thumbs">${ph("Photo")}${ph("Photo")}${ph("Photo")}</div>
-      <section class="sec"><h3>Things to do</h3><p class="muted">${things.map(a => esc(a.name)).join(" | ")}</p></section>
+    <div class="dest-main">
+      ${ph("Main destination photo", "dest-img")}
+      <div class="dest-thumbs">${ph("Photo")}${ph("Photo")}${ph("Photo")}</div>
+      <h3>Things to do</h3>
+      <p class="line">${esc(d.todo)}</p>
       <hr>
-      <section class="sec"><h3>Traveler reviews</h3>${d.reviews.map(([t, w]) => `<p class="muted">[Sample review] ${esc(t)} <em>– ${esc(w)}</em></p>`).join("")}</section>
+      <h3>Traveler reviews</h3>
+      <p class="line">[Review placeholder] ${esc(d.review)}</p>
     </div>
-    <aside class="panel glance">
+    <aside class="glance">
       <h3>Your trip at a glance</h3>
-      <p class="muted small">${range(p.start, p.end)} / ${plural(p.travelers, "traveler")}</p>
-      <div><p class="label">Estimated cost</p><p class="price">${money(m.cost.total)} per person</p><p class="muted small">Travel + stay + activities estimate${m.within ? "" : ` · <span class="over">${money(m.cost.total - p.budget)} over budget</span>`}</p></div>
+      <p class="g-dates">${shortRange(p.start, p.end)} / ${plural(p.travelers, "traveler")}</p>
+      <p class="k">Estimated cost</p>
+      <p class="price">${money(m.cost.total)} per person</p>
+      <p class="g-note">Travel + stay + activities estimate${m.within ? "" : " | Over budget"}</p>
       <hr>
-      <div class="pref"><strong>Getting there</strong><span class="muted">${esc(tv.how)}, ${tv.t.toLowerCase()}</span></div>
-      <div class="pref"><strong>Weather</strong><span class="muted">${esc(d.weather)}</span></div>
-      <div class="pref"><strong>Accessibility</strong><span class="muted">${esc(d.access)}</span></div>
-      ${p.needs.includes("pet") ? `<div class="pref"><strong>Pets</strong><span class="muted">${esc(d.pets)}</span></div>` : ""}
-      <button class="btn btn-primary" data-choose="${d.id}">Choose This Trip</button>
-      <button class="btn btn-secondary" data-addcmp="${d.id}">${inCmp ? "Remove from Compare" : "Add to Compare"}</button>
+      <p class="k">Getting there</p><p class="g-v">${mode(p) === "car" ? "Drive" : "Train"} from NYC | about ${tv.t.replace("About ", "")}</p>
+      <p class="k">Weather</p><p class="g-v">Cool fall weather | check forecast near departure</p>
+      <p class="k">Accessibility</p><p class="g-v">${esc(d.accessShort)}</p>
+      <button class="btn btn-primary btn-left g-btn" data-choose="${d.id}">Choose This Trip</button>
+      <button class="btn btn-secondary btn-left g-btn2" data-addcmp="${d.id}">${inCmp ? "Remove from Compare" : "Add to Compare"}</button>
     </aside>
   </div></div>`;
 }
 
-// 05 Compare
+/* ---------------- 05 Compare ---------------- */
 function vCompare() {
-  const p = S.prefs, ids = S.compare.slice(0, 3);
+  const p = S.prefs, ids = S.compare.slice(0, 2);
   if (ids.length < 2) {
-    return `<div class="page"><div><button class="back" data-go="results">&lt; Back to Recommendations</button><h1>Compare destinations</h1></div>
-      <div class="panel empty"><p>Select at least two destinations to compare.</p><button class="btn btn-primary" data-go="results">Choose destinations</button></div></div>`;
+    return `<div class="compare"><button class="crumb" data-go="results">&lt; Back to Recommendations</button><h1>Compare destinations</h1>${prefLine(p)}
+      <div class="cmp-empty">Select two destinations on the recommendations page to compare them.<button class="btn btn-primary" data-go="results">Choose destinations</button></div></div>`;
   }
   const cols = ids.map(id => ({ d: DESTS[id], ...matchInfo(DESTS[id], p) }));
-  const row = (label, fn, cls = "") => `<tr class="${cls}"><th scope="row">${label}</th>${cols.map(c => `<td>${fn(c)}</td>`).join("")}</tr>`;
-  return `<div class="page">
-  <div><button class="back" data-go="results">&lt; Back to Recommendations</button><h1>Compare destinations</h1>${prefLine(p)}</div>
-  <div class="table-wrap"><table class="cmp">
-    <tr><th></th>${cols.map(c => `<td>${ph("Destination photo", "cmp-img")}<h3>${c.d.name}, ${c.d.state}</h3><p class="muted small">${esc(c.d.tagline)}</p></td>`).join("")}</tr>
-    ${row("Estimated cost", c => `<strong>${money(c.cost.total)}</strong> / person<br><span class="muted small">Travel + stay + activities</span>${c.within ? "" : `<br><span class="over small">${money(c.cost.total - p.budget)} over budget</span>`}`)}
-    ${row("Travel time", c => `${c.d.travel[mode(p)].t}`)}
-    ${row("Transportation", c => `<span class="small">${esc(c.d.travel[mode(p)].how)}</span>`)}
-    ${row("Activities", c => c.d.acts.filter(a => a.kind !== "Transit" && a.kind !== "Food").slice(0, 3).map(a => `<div class="small">[x] ${esc(a.name)}</div>`).join(""))}
-    ${row("", c => `<div class="row-btns"><button class="btn btn-primary btn-sm grow" data-choose="${c.d.id}">Choose This Trip</button><button class="btn btn-secondary btn-sm" data-rmcmp="${c.d.id}">Remove</button></div>`, "actions")}
-  </table></div></div>`;
+  const row = (label, cls, fn) => `<div class="c-row ${cls}"><div class="c-label">${label}</div>${cols.map(c => `<div class="c-cell">${fn(c)}</div>`).join("")}</div>`;
+  return `<div class="compare">
+  <button class="crumb" data-go="results">&lt; Back to Recommendations</button>
+  <h1>Compare destinations</h1>
+  ${prefLine(p)}
+  <div class="c-scroll"><div class="c-table">
+    ${row("", "c-head", c => `${ph("Destination photo", "c-img")}<h3>${c.d.name}, ${c.d.state}</h3><p class="c-sub">${esc(c.d.short)}</p>`)}
+    ${row("Estimated cost", "c-cost", c => `<p><strong>${money(c.cost.total)}</strong> &nbsp;/ person</p><p class="c-sub">Travel + stay + activities${c.within ? "" : " | Over budget"}</p>`)}
+    ${row("Travel time", "c-time", c => `<p>${c.d.travel[mode(p)].t}</p>`)}
+    ${row("Transportation", "c-trans", c => `<p>${esc(c.d.transLine)}</p><p>${esc(c.d.transLine2)}</p>`)}
+    ${row("Activities", "c-acts", c => c.d.acts.filter(a => a.kind !== "Transit" && a.kind !== "Food").slice(0, 3).map(a => `<p>[x] ${esc(a.name)}</p>`).join(""))}
+    ${row("", "c-actions", c => `<button class="btn btn-primary c-choose" data-choose="${c.d.id}">Choose This Trip</button><button class="btn btn-secondary c-remove" data-rmcmp="${c.d.id}">Remove</button>`)}
+  </div></div></div>`;
 }
 
-const dayLabel = (t, i) => `Day ${i + 1} · ${fmt(addDays(t.prefs.start, i), { weekday: "short" })}`;
-function sortedDay(day) { return [...day].sort((a, b) => toMin(a.t) - toMin(b.t)); }
-function dayTabs(t) {
-  return `<div class="tabs" role="tablist">${t.days.map((_, i) => `<button class="tab" role="tab" aria-selected="${i === S.day}" data-day="${i}">${dayLabel(t, i)}</button>`).join("")}</div>`;
-}
+const sortedDay = day => [...day].sort((a, b) => toMin(a.t) - toMin(b.t));
+const wk = (t, i) => fmt(addDays(t.prefs.start, i), { weekday: "short" });
 
-// 06 Itinerary builder
+/* ---------------- 06 Itinerary ---------------- */
 function vItin() {
   const t = S.trip, d = DESTS[t.dest], p = t.prefs, c = costFor(d, p, t.days), day = t.days[S.day] || [];
   const used = new Set(t.days.flat().map(x => x.a));
   const avail = d.acts.filter(a => !used.has(a.id));
   const items = day.map((it, idx) => ({ it, idx })).sort((a, b) => toMin(a.it.t) - toMin(b.it.t));
   const fromTrips = !!t.fromTrips;
-  return `<div class="page">
-  <div><button class="back" ${fromTrips ? 'data-go="trips"' : `data-dest="${d.id}"`}>&lt; ${fromTrips ? "Back to My Trips" : "Back to destination"}</button>
-    <h1>Build your ${d.name} itinerary</h1>
-    <p class="meta-line">${range(p.start, p.end)} | ${plural(t.days.length, "day")} | ${plural(p.travelers, "traveler")}${t.status === "saved" ? (t.dirty ? " | Unsaved changes" : " | Saved") : t.status === "draft" ? " | Draft" : ""}</p></div>
+  return `<div class="itin">
+  <button class="crumb" ${fromTrips ? 'data-go="trips"' : `data-dest="${d.id}"`}>&lt; ${fromTrips ? "Back to My Trips" : "Back to destination"}</button>
+  <h1>Build your ${d.name} itinerary</h1>
+  <p class="meta">${shortRange(p.start, p.end)} | ${plural(t.days.length, "day")} | ${plural(p.travelers, "traveler")}${t.status === "saved" ? (t.dirty ? " | Unsaved changes" : " | Saved") : t.status === "draft" ? " | Draft" : ""}</p>
   <div class="itin-grid">
-    <div class="stack tight">
-      ${dayTabs(t)}
-      <div class="card sched">
+    <div class="itin-main">
+      <div class="day-tabs" role="tablist">${t.days.map((_, i) => `<button class="dtab" role="tab" aria-selected="${i === S.day}" data-day="${i}">Day ${i + 1} · ${wk(t, i)}</button>`).join("")}</div>
+      <div class="sched">
         ${items.length ? items.map(({ it, idx }) => { const a = act(d, it.a); return `
         <div class="slot">
-          <input type="time" class="time" value="${it.t}" data-time="${idx}" aria-label="Start time for ${esc(a.name)}">
-          <div class="slot-body"><strong>${esc(a.name)}</strong><span class="muted small">${esc(a.note)} | ${dur(a.mins)} | ${a.cost ? money(a.cost) : "Free"}</span></div>
-          <button class="btn btn-secondary btn-sm" data-remove="${idx}">Remove activity</button>
-        </div>`; }).join("") : `<p class="empty muted">No activities planned for this day yet.</p>`}
+          <span class="s-time">${clock(it.t)}</span>
+          <div class="s-body"><strong>${esc(a.name)}</strong><span>${esc(a.note)}</span></div>
+          <button class="btn btn-secondary s-btn" data-remove="${idx}">Remove activity</button>
+        </div>`; }).join("") : `<div class="slot slot-empty">No activities planned for this day.</div>`}
       </div>
       ${S.addOpen ? `<div class="adder">
-          <div class="adder-head"><strong>Add an activity to ${dayLabel(t, S.day)}</strong><button class="btn btn-secondary btn-sm" data-toggle-add>Close</button></div>
-          ${avail.length ? avail.map(a => `<div class="adder-item"><div><strong>${esc(a.name)}</strong><div class="muted small">${a.kind} | ${dur(a.mins)} | ${a.cost ? money(a.cost) : "Free"}${p.interests.includes(KIND_INTEREST[a.kind]) ? " | Matches your interests" : ""}</div></div><button class="btn btn-primary btn-sm" data-add="${a.id}">Add</button></div>`).join("") : `<p class="muted small">All activities are already in your plan.</p>`}
-        </div>` : `<button class="add-box" data-toggle-add>+ Add Activity</button>`}
+        <div class="adder-head"><strong>Add an activity to Day ${S.day + 1}</strong><button class="btn btn-secondary s-btn" data-toggle-add>Close</button></div>
+        ${avail.length ? avail.map(a => `<div class="adder-item"><div><strong>${esc(a.name)}</strong><span>${a.kind} | ${dur(a.mins)} | ${a.cost ? money(a.cost) : "Free"}</span></div><button class="btn btn-primary s-btn" data-add="${a.id}">Add</button></div>`).join("") : `<p>All activities are already in your plan.</p>`}
+      </div>` : `<button class="add-act" data-toggle-add>+ Add Activity</button>`}
     </div>
-    <aside class="panel summary">
+    <aside class="tsum">
       <h3>Trip summary</h3>
-      <p class="muted small">${d.name}, ${d.state} | ${range(p.start, p.end)} | ${plural(p.travelers, "traveler")}</p>
+      <p class="t-sub">${d.name}, ${d.state} | ${shortRange(p.start, p.end)} | ${plural(p.travelers, "traveler")}</p>
       <hr>
-      <div class="rows">
-        <div><span>Transportation</span><span>${money(c.transport)}</span></div>
-        <div><span>Stay (${plural(t.days.length - 1, "night")})</span><span>${money(c.stay)}</span></div>
-        <div><span>Food</span><span>${money(c.food)}</span></div>
-        <div><span>Activities</span><span>${money(c.acts)}</span></div>
+      <div class="t-rows">
+        <p><span>Transportation</span><span>${money(c.transport)}</span></p>
+        <p><span>Stay (${plural(t.days.length - 1, "night")})</span><span>${money(c.stay)}</span></p>
+        <p><span>Food</span><span>${money(c.food)}</span></p>
+        <p><span>Activities</span><span>${money(c.acts)}</span></p>
       </div>
       <hr>
-      <div><p class="label">Estimated cost</p><p class="price">${money(c.total)} per person</p>
-        <p class="small ${c.total > p.budget ? "over" : "muted"}">${c.total > p.budget ? `${money(c.total - p.budget)} over your ${money(p.budget)} budget` : `Within your ${money(p.budget)} budget`}</p></div>
+      <p class="t-k">Estimated cost</p>
+      <p class="price">${money(c.total)} per person</p>
+      <p class="t-v">${c.total > p.budget ? `${money(c.total - p.budget)} over your ${money(p.budget)} budget` : `Within your ${money(p.budget)} budget`}</p>
       <hr>
-      <div><p class="label">Activities planned</p><p class="muted small">${t.days.map((dd, i) => `Day ${i + 1}: ${dd.length}`).join(" | ")}</p></div>
-      <button class="btn btn-secondary" data-go="route">View Route</button>
-      <button class="btn btn-primary" data-save>Save Trip</button>
+      <p class="t-k2">Activities planned</p>
+      <p class="t-v">${t.days.map((dd, i) => `Day ${i + 1}: ${dd.length}`).join(" | ")}</p>
+      <button class="btn btn-secondary t-btn" data-go="route">View Route</button>
+      <button class="btn btn-primary t-btn t-save" data-save>Save Trip</button>
     </aside>
   </div></div>`;
 }
@@ -353,90 +361,92 @@ function leg(a, b, p) {
   return { km, mins: Math.round(km / 35 * 60) + 5, how: p.transport === "car" ? "Drive" : "Taxi" };
 }
 
-// Map: gray placeholder box with an X, stops plotted from real coordinates
+// Map: wireframe gray box with an X; black numbered dots plotted from real coordinates
 function routeMap(stops) {
-  const W = 640, H = 460, pad = 60, z = S.zoom;
+  const W = 880, H = 680, pad = 90, z = S.zoom;
   const lat0 = stops.reduce((s, x) => s + x.lat, 0) / stops.length, k = Math.cos(lat0 * Math.PI / 180);
   const xs = stops.map(s => s.lng * k), ys = stops.map(s => s.lat);
   const minX = Math.min(...xs), maxX = Math.max(...xs), minY = Math.min(...ys), maxY = Math.max(...ys);
   const sc = Math.min((W - 2 * pad) / Math.max(maxX - minX, .006), (H - 2 * pad) / Math.max(maxY - minY, .006)) * z;
   const cx = (minX + maxX) / 2, cy = (minY + maxY) / 2, seen = {};
-  const pts = stops.map(s => { const key = s.lat + "," + s.lng, n = seen[key] = (seen[key] || 0) + 1; return { x: W / 2 + (s.lng * k - cx) * sc + (n - 1) * 18, y: H / 2 - (s.lat - cy) * sc - (n - 1) * 8 }; });
+  const pts = stops.map(s => { const key = s.lat + "," + s.lng, n = seen[key] = (seen[key] || 0) + 1; return { x: W / 2 + (s.lng * k - cx) * sc + (n - 1) * 22, y: H / 2 - (s.lat - cy) * sc - (n - 1) * 10 }; });
   const path = pts.map((p, i) => (i ? "L" : "M") + p.x.toFixed(1) + " " + p.y.toFixed(1)).join(" ");
-  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Route map with ${stops.length} stops">
-    <rect width="${W}" height="${H}" fill="#f2f2f2"/>
-    <line x1="0" y1="0" x2="${W}" y2="${H}" stroke="#dcdcdc"/><line x1="${W}" y1="0" x2="0" y2="${H}" stroke="#dcdcdc"/>
-    <path d="${path}" fill="none" stroke="#555" stroke-width="1.5"/>
-    ${pts.map((p, i) => `<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="11" fill="#222"/><text x="${p.x.toFixed(1)}" y="${(p.y + 4).toFixed(1)}" text-anchor="middle" font-size="11" font-weight="700" fill="#fff" font-family="Inter, Arial, sans-serif">${i + 1}</text>`).join("")}
+  return `<svg class="map-svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Route map with ${stops.length} stops">
+    <line x1="0" y1="0" x2="${W}" y2="${H}" stroke="#dedede"/><line x1="${W}" y1="0" x2="0" y2="${H}" stroke="#dedede"/>
+    <path d="${path}" fill="none" stroke="#8a8a8a" stroke-width="1.2"/>
+    ${pts.map((p, i) => `<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="14" fill="#1f1f1f"/><text x="${p.x.toFixed(1)}" y="${(p.y + 4.5).toFixed(1)}" text-anchor="middle" font-size="12" font-weight="700" fill="#fff" font-family="Inter, Arial, sans-serif">${i + 1}</text>`).join("")}
   </svg>`;
 }
 
-// 07 Route
+/* ---------------- 07 Route ---------------- */
 function vRoute() {
   const t = S.trip, d = DESTS[t.dest], p = t.prefs, day = sortedDay(t.days[S.day] || []);
   const stops = day.map(it => ({ ...act(d, it.a), t: it.t }));
   let travel = 0;
   const legs = stops.slice(1).map((s, i) => { const l = leg(stops[i], s, p); travel += l.mins; return l; });
-  return `<div class="page">
-  <div class="head-row">
-    <div><h1>Route for Day ${S.day + 1}</h1><p class="meta-line">${d.name}, ${d.state} | ${fmt(addDays(p.start, S.day), { weekday: "short", month: "short", day: "numeric" })} | ${plural(stops.length, "stop")} | ${travel} min getting around</p></div>
-    <div class="tabs" role="tablist">${t.days.map((_, i) => `<button class="tab" role="tab" aria-selected="${i === S.day}" data-day="${i}">Day ${i + 1}</button>`).join("")}</div>
+  return `<div class="route">
+  <div class="route-head">
+    <div><h1>Route for Day ${S.day + 1}</h1>
+      <p class="meta">${d.name}, ${d.state} | ${fmt(addDays(p.start, S.day), { weekday: "short", month: "short", day: "numeric" })} | ${plural(stops.length, "stop")} | ${travel} min travel</p></div>
+    <div class="route-tabs" role="tablist">${t.days.map((_, i) => `<button class="dtab" role="tab" aria-selected="${i === S.day}" data-day="${i}">Day ${i + 1}</button>`).join("")}</div>
   </div>
   <div class="route-grid">
-    <div class="stack tight">
-      <div class="card stops">${stops.length ? stops.map((s, i) => `
+    <div class="route-left">
+      <div class="stops">${stops.length ? stops.map((s, i) => `
         ${i ? `<div class="leg">${legs[i - 1].how}${legs[i - 1].mins ? ` · ${legs[i - 1].mins} min · ${legs[i - 1].km.toFixed(1)} km` : ""}</div>` : ""}
-        <div class="stop"><span class="num">${i + 1}</span><div><strong>${esc(s.name)}</strong><div class="muted small">${clock(s.t)} · ${dur(s.mins)}</div></div></div>`).join("")
-        : `<p class="empty muted">No stops planned for this day.</p>`}</div>
-      <div class="row-btns"><button class="btn btn-secondary grow" data-go="itinerary">&lt; Back to Itinerary</button><button class="btn btn-primary grow" data-save>Save Trip</button></div>
+        <div class="stop"><span class="num">${i + 1}</span><div><strong>${esc(s.name)}</strong><span>${clock(s.t)} · ${dur(s.mins)}</span></div></div>`).join("")
+        : `<div class="stop"><div><strong>No stops planned</strong><span>Add activities in the itinerary.</span></div></div>`}</div>
+      <div class="route-btns"><button class="btn btn-secondary" data-go="itinerary">&lt; Back to Itinerary</button><button class="btn btn-primary" data-save>Save Trip</button></div>
     </div>
     <div class="map">
-      ${stops.length ? routeMap(stops) : ph("Map placeholder", "map-empty")}
-      <span class="map-tag">Map · ${d.name}</span>
-      ${stops.length ? `<div class="map-legend"><strong>Next: ${esc(stops[Math.min(1, stops.length - 1)].name)}</strong><span class="muted">${legs[0] ? `${legs[0].how} · ${legs[0].mins} min` : "Single stop"}</span></div>` : ""}
+      ${stops.length ? routeMap(stops) : `<svg class="map-svg" viewBox="0 0 880 680" preserveAspectRatio="none"><line x1="0" y1="0" x2="880" y2="680" stroke="#dedede"/><line x1="880" y1="0" x2="0" y2="680" stroke="#dedede"/></svg>`}
+      <span class="map-tag">Map placeholder</span>
+      ${stops.length > 1 ? `<div class="map-legend"><strong>Next: ${esc(stops[1].name)}</strong><span>${legs[0].how} ${legs[0].mins} min | ${travel} min travel today</span></div>` : ""}
       <div class="zoom"><button data-zoom="1" aria-label="Zoom in">+</button><button data-zoom="-1" aria-label="Zoom out">−</button></div>
     </div>
   </div></div>`;
 }
 
-function tripBucket(t) {
-  if (t.status === "draft") return "drafts";
-  return t.prefs.end < iso(new Date()) ? "past" : "upcoming";
+/* ---------------- 08 My Trips ---------------- */
+function tripBucket(t) { return t.prefs.end < iso(new Date()) ? "past" : "upcoming"; }
+function inTab(t, tab) {
+  if (tab === "drafts") return t.status === "draft";
+  return tripBucket(t) === tab;
 }
-
-// 08 My Trips
 function vTrips() {
   const tabs = [["upcoming", "Upcoming"], ["drafts", "Drafts"], ["past", "Past"]];
-  const list = S.trips.filter(t => tripBucket(t) === S.tripsTab);
-  const count = k => S.trips.filter(t => tripBucket(t) === k).length;
-  return `<div class="page">
-  <div class="head-row"><div><h1>My Trips</h1><p class="muted small">${plural(S.trips.length, "saved trip")}</p></div><button class="btn btn-primary" data-newtrip>+ Plan a New Trip</button></div>
+  const list = S.trips.filter(t => inTab(t, S.tripsTab));
+  const count = k => S.trips.filter(t => inTab(t, k)).length;
+  return `<div class="trips">
+  <div class="trips-head"><div><h1>My Trips</h1><p class="sub">${plural(S.trips.length, "saved trip")}</p></div><button class="btn btn-primary new-trip" data-newtrip>+ Plan a New Trip</button></div>
   <div class="trip-tabs" role="tablist">${tabs.map(([k, l]) => `<button role="tab" aria-selected="${S.tripsTab === k}" data-ttab="${k}">${l} (${count(k)})</button>`).join("")}</div>
   ${list.length ? `<div class="trip-cards">${list.map(t => { const d = DESTS[t.dest], c = costFor(d, t.prefs, t.days), n = t.days.flat().length; return `
-    <article class="card trip ${t.status === "draft" ? "draft" : ""}">
+    <article class="trip ${t.status === "draft" ? "draft" : ""}">
       ${ph("Image placeholder", "trip-img")}
       <div class="trip-top"><h3>${d.name}, ${d.state}</h3><span class="badge">${t.status === "draft" ? "Draft" : tripBucket(t) === "past" ? "Past" : "Upcoming"}</span></div>
-      <p class="small">${range(t.prefs.start, t.prefs.end)} | ${plural(t.prefs.travelers, "traveler")}</p>
-      <p class="small">Estimated budget: <strong>${money(c.total)}/person</strong></p>
-      <p class="small muted">${n} ${n === 1 ? "activity" : "activities"} planned${t.sample ? " · Sample trip" : ""}</p>
-      <div class="row-btns"><button class="btn btn-primary btn-sm grow" data-open="${t.id}">Open Trip</button><button class="btn btn-secondary btn-sm grow" data-open="${t.id}">Edit Trip</button></div>
+      <p>${shortRange(t.prefs.start, t.prefs.end)} | ${plural(t.prefs.travelers, "traveler")}</p>
+      <p>Estimated budget: <strong>${money(c.total)}/person</strong></p>
+      <p>${n} ${n === 1 ? "activity" : "activities"} planned</p>
+      <div class="trip-btns"><button class="btn btn-primary" data-open="${t.id}">Open Trip</button><button class="btn btn-secondary" data-open="${t.id}">Edit Trip</button></div>
     </article>`; }).join("")}</div>`
-  : `<div class="panel empty"><p>${S.tripsTab === "drafts" ? "No drafts. Trips you edit without saving appear here." : S.tripsTab === "past" ? "No past trips yet." : "No upcoming trips."}</p><button class="btn btn-primary" data-newtrip>+ Plan a New Trip</button></div>`}
+  : `<p class="trips-empty">${S.tripsTab === "drafts" ? "No drafts. Trips you edit without saving appear here." : S.tripsTab === "past" ? "No past trips yet." : "No upcoming trips."}</p>`}
   </div>`;
 }
 
 function render() {
   const v = { home: vHome, plan: vPlan, results: vResults, destination: vDest, compare: vCompare, itinerary: vItin, route: vRoute, trips: vTrips }[S.view];
   $("#app").innerHTML = v();
+  // Frames 05–08 in the wireframe use a shorter header and wider margins
+  document.body.classList.toggle("frame-b", ["compare", "itinerary", "route", "trips"].includes(S.view));
   const navKey = { home: "home", destination: "home", trips: "trips" }[S.view] || "plan";
   document.querySelectorAll("[data-nav]").forEach(b => { if (b.dataset.nav === navKey) b.setAttribute("aria-current", "page"); else b.removeAttribute("aria-current"); });
 }
 
 /* ---------------- state ---------------- */
-const STORE="tp-trips-v2";
+const STORE="tp-trips-v3";
 function seedTrips(){
   const mk=(id,dest,start,end,status)=>{const d=DESTS[dest];const prefs={from:"New York City",start,end,budget:500,travelers:2,interests:["art","nature"],transport:"train",needs:[]};return {id,dest,prefs,days:defaultPlan(d,dayCount(prefs)),status,sample:true,savedAt:Date.now()}};
-  return [mk("sample-beacon","beacon","2026-11-13","2026-11-15","saved"),mk("sample-cs","coldspring","2026-09-18","2026-09-20","saved"),mk("sample-hudson","hudson","2026-12-04","2026-12-06","draft")];
+  return [mk("sample-hudson","hudson","2026-11-13","2026-11-15","saved"),mk("sample-cs","coldspring","2026-11-20","2026-11-22","saved"),mk("sample-beacon","beacon","2026-12-04","2026-12-06","draft")];
 }
 function loadTrips(){try{const v=JSON.parse(localStorage.getItem(STORE));if(Array.isArray(v))return v}catch(e){}return seedTrips()}
 function persist(){try{localStorage.setItem(STORE,JSON.stringify(S.trips))}catch(e){}}
@@ -494,11 +504,12 @@ document.addEventListener("click",e=>{
   if(ds.addcmp){
     const id=ds.addcmp;
     if(S.compare.includes(id)){S.compare=S.compare.filter(x=>x!==id);render();toast(`${DESTS[id].name} removed from compare.`);return}
-    if(S.compare.length>=3){toast("You can compare up to three destinations.",{label:"Open Compare",go:"compare"});return}
+    if(S.compare.length>=2)S.compare.shift();
     S.compare.push(id);
     if(S.compare.length>=2){go("compare");return}
     render();toast(`${DESTS[id].name} added. Pick one more destination to compare.`,{label:"Back to recommendations",go:"results"});return;
   }
+  if(ds.cmptoggle){const id=ds.cmptoggle;if(S.compare.includes(id))S.compare=S.compare.filter(x=>x!==id);else{if(S.compare.length>=2)S.compare.shift();S.compare.push(id)}render();return}
   if(ds.rmcmp){S.compare=S.compare.filter(x=>x!==ds.rmcmp);render();return}
   if("clearCmp" in ds){S.compare=[];render();return}
   if(ds.zoom){S.zoom=Math.min(3,Math.max(.6,S.zoom*(ds.zoom>0?1.3:1/1.3)));render();return}
@@ -528,7 +539,7 @@ document.addEventListener("change",e=>{
   if(el.dataset.time!==undefined&&el.value){S.trip.days[S.day][+el.dataset.time].t=el.value;touch();render();return}
   if(el.id==="f-start"||el.id==="f-end"){
     const s=$("#f-start").value,en=$("#f-end").value,h=$("#f-days");
-    if(h&&s&&en){const n=Math.round((pd(en)-pd(s))/864e5)+1;h.textContent=n>0?`${plural(n,"day")}, ${plural(n-1,"night")}`:"End date is before the start date"}
+    if(h&&s&&en){const n=Math.round((pd(en)-pd(s))/864e5)+1;h.textContent=n>0?`| ${plural(n,"day")}`:"| check dates"}
   }
 });
 document.addEventListener("submit",e=>{
@@ -554,3 +565,13 @@ document.addEventListener("submit",e=>{
   if(VIEWS.includes(h)){ if(h==="compare"&&S.compare.length<2) S.compare=["hudson","beacon"]; go(h); }
   else render();
 })();
+
+/* ---------------- scale to the 1440px wireframe ----------------
+   The design is drawn on a 1440px-wide frame. On desktop screens the whole
+   page is scaled so it looks the same at any window width. */
+function fitToFrame(){
+  const w=document.documentElement.clientWidth;
+  document.body.style.zoom = w>=1024 ? String(w/1440) : "";
+}
+window.addEventListener("resize",fitToFrame);
+fitToFrame();
